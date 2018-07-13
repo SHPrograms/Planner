@@ -17,7 +17,7 @@ public final class SHDebug {
     /*
      * LOG.d purposes
      */
-    private static final String DEBUG_TAG = "DebugTag";
+    private static final String DEBUG_TAG = "SHPDebugTag";
     /*
      * LOG.e purposes
      */
