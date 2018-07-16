@@ -21,17 +21,17 @@ import java.util.List;
 @Dao
 public interface EventDao {
     @Insert
-    void insertEvent(EventEntry EventEntry);
+    void insertEvent(EventEntity EventEntity);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateEvent(EventEntry EventEntry);
+    void updateEvent(EventEntity EventEntity);
 
     @Delete
-    void deleteEvent(EventEntry EventEntry);
+    void deleteEvent(EventEntity EventEntity);
 
-    @Query("SELECT * FROM Event ORDER BY id")
-    LiveData<List<EventEntry>> loadAllEvents();
+    @Query("SELECT * FROM event ORDER BY id")
+    LiveData<List<EventEntity>> loadAllEvents();
 
-    @Query("SELECT * FROM Event WHERE category_id = :id ORDER BY id")
-    LiveData<EventEntry> loadEventsByCategoryId(int id);
+    @Query("SELECT * FROM event WHERE category_id = :id ORDER BY id")
+    LiveData<EventEntity> loadEventsByCategoryId(int id);
 }

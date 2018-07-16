@@ -1,23 +1,34 @@
 package com.sh.study.udacitynano.planner.list;
 
+import android.arch.lifecycle.Observer;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.facebook.stetho.Stetho;
 import com.sh.study.udacitynano.planner.R;
 import com.sh.study.udacitynano.planner.constants.SHDebug;
+import com.sh.study.udacitynano.planner.database.CategoryEntity;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * Main activity. List of triggers, categories
+ *
+ * Search function based on {@link "http://www.zoftino.com/android-search-functionality-using-searchview-and-room"}
  *
  * @author Sławomir Hagiel
  * @version 1.0
@@ -28,21 +39,33 @@ public class ListActivity extends AppCompatActivity {
     public Toolbar toolbar;
     @BindView(R.id.fab)
     public FloatingActionButton fab;
+    @BindView(R.id.search_results_list)
+    public ListView listView;
 
+    private SearchView searchView;
+    private LocalRepository localRepository = new LocalRepository();
 
     private static final String CLASS_NAME = "ListActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SHDebug.debugTag(CLASS_NAME, "onCreate:Start");
         setContentView(R.layout.activity_list);
         ButterKnife.bind(this);
 
-        Stetho.initializeWithDefaults(this);
+        // TODO: Only for testing
+//        Stetho.initializeWithDefaults(this);
 
         setSupportActionBar(toolbar);
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent addCategory = new Intent(ListActivity.this, AddCategoryActivity.class);
+                startActivity(addCategory);
+            }
+        });
 
         SHDebug.debugTag(CLASS_NAME, "onCreate:End");
     }
@@ -52,9 +75,50 @@ public class ListActivity extends AppCompatActivity {
         SHDebug.debugTag(CLASS_NAME, "onCreateOptionsMenu:Start");
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_list, menu);
-        return true;
+
+
+        // Search view:
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(onQueryTextListener);
+
+        return super.onCreateOptionsMenu(menu);
     }
 
+    private SearchView.OnQueryTextListener onQueryTextListener =
+            new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    getDealsFromDb(query);
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    getDealsFromDb(newText);
+                    return true;
+                }
+
+                private void getDealsFromDb(String searchText) {
+                    searchText = "%"+searchText+"%";
+                    localRepository.getDealsListInfo(ListActivity.this, searchText)
+                            .observe(ListActivity.this, new Observer<List<CategoryEntity>>() {
+                                @Override
+                                public void onChanged(@Nullable List<CategoryEntity> deals) {
+                                    if (deals == null) {
+                                        return;
+                                    }
+                                    DealsListViewAdapter adapter = new DealsListViewAdapter(
+                                            ListActivity.this,
+                                            R.layout.deal_item_layout, deals);
+                                    listView.setAdapter(adapter);
+
+                                }
+                            });
+                }
+            };
+
+/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         SHDebug.debugTag(CLASS_NAME, "onOptionsItemSelected:Start");
@@ -70,4 +134,5 @@ public class ListActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+*/
 }

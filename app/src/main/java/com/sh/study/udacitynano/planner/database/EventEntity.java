@@ -16,7 +16,7 @@ import java.util.Date;
  * @since 2018-07-13
  */
 @Entity(tableName = "event")
-public class EventEntry {
+public class EventEntity {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -32,7 +32,7 @@ public class EventEntry {
     private Date updatedAt;
 
     @Ignore
-    public EventEntry(Date dateStart, Date dateEnd, long time, String description, int categoryId, Date updatedAt) {
+    public EventEntity(Date dateStart, Date dateEnd, long time, String description, int categoryId, Date updatedAt) {
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.time = time;
@@ -41,7 +41,7 @@ public class EventEntry {
         this.updatedAt = updatedAt;
     }
 
-    public EventEntry(int id, Date dateStart, Date dateEnd, long time, String description, int categoryId, Date updatedAt) {
+    public EventEntity(int id, Date dateStart, Date dateEnd, long time, String description, int categoryId, Date updatedAt) {
         this.id = id;
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;

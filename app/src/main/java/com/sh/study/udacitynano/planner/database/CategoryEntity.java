@@ -16,28 +16,32 @@ import java.util.Date;
  * @since 2018-07-13
  */
 @Entity(tableName = "category")
-public class CategoryEntry {
+public class CategoryEntity {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String name;
     @ColumnInfo(name = "parent_id")
     private int parentId;
+/*
     @ColumnInfo(name = "updated_at")
     private Date updatedAt;
+*/
 
     @Ignore
-    public CategoryEntry(String name, int parentId, Date updatedAt) {
+//    public CategoryEntity(String name, int parentId, Date updatedAt) {
+      public CategoryEntity(String name, int parentId) {
         this.name = name;
         this.parentId = parentId;
-        this.updatedAt = updatedAt;
+//        this.updatedAt = updatedAt;
     }
 
-    public CategoryEntry(int id, String name, int parentId, Date updatedAt) {
+//    public CategoryEntity(int id, String name, int parentId, Date updatedAt) {
+    public CategoryEntity(int id, String name, int parentId) {
         this.id = id;
         this.name = name;
         this.parentId = parentId;
-        this.updatedAt = updatedAt;
+//        this.updatedAt = updatedAt;
     }
 
     public int getId() {
@@ -64,6 +68,7 @@ public class CategoryEntry {
         this.parentId = parentId;
     }
 
+/*
     public Date getUpdatedAt() {
         return updatedAt;
     }
@@ -71,4 +76,5 @@ public class CategoryEntry {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+*/
 }

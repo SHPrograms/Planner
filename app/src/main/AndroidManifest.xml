@@ -11,13 +11,21 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".list.ListActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".list.AddCategoryActivity"
+            android:label="@string/title_activity_add_category"
+            android:parentActivityName=".list.ListActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sh.study.udacitynano.planner.list.ListActivity" />
         </activity>
     </application>
 

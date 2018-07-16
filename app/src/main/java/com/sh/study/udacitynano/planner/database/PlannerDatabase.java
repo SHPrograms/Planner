@@ -17,7 +17,7 @@ import com.sh.study.udacitynano.planner.constants.SHDebug;
  * @version 1.0
  * @since 2018-07-13
  */
-@Database(entities = {EventEntry.class, CategoryEntry.class}, version = 1, exportSchema = false)
+@Database(entities = {EventEntity.class, CategoryEntity.class}, version = 1, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract class PlannerDatabase extends RoomDatabase {
     private static final String CLASS_NAME = "PlannerDatabase";

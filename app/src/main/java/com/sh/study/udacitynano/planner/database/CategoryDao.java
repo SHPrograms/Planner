@@ -7,6 +7,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
+import android.database.Cursor;
 
 import java.util.List;
 
@@ -21,17 +22,20 @@ import java.util.List;
 @Dao
 public interface CategoryDao {
     @Insert
-    void insertCategory(CategoryEntry categoryEntry);
+    void insertCategory(CategoryEntity categoryEntity);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateCategory(CategoryEntry categoryEntry);
+    void updateCategory(CategoryEntity categoryEntity);
 
     @Delete
-    void deleteCategory(CategoryEntry categoryEntry);
+    void deleteCategory(CategoryEntity categoryEntity);
 
     @Query("SELECT * FROM category ORDER BY name")
-    LiveData<List<CategoryEntry>> loadAllCategories();
+    LiveData<List<CategoryEntity>> loadAllCategories();
 
     @Query("SELECT * FROM category WHERE parent_id = :id ORDER BY name")
-    LiveData<CategoryEntry> loadCategoriesByParentId(int id);
+    LiveData<CategoryEntity> loadCategoriesByParentId(int id);
+
+    @Query("SELECT * FROM category WHERE name LIKE :dealText")
+    LiveData<List<CategoryEntity>> getDealsList(String dealText);
 }
