@@ -8,9 +8,10 @@
 
         <TextView
             android:id="@+id/tv_category_name"
-            style="@style/TextAppearance.AppCompat.Medium"
+            style="@style/TextAppearance.AppCompat.Large"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="16dp"
             tools:text="Category name" />
 </LinearLayout>
 

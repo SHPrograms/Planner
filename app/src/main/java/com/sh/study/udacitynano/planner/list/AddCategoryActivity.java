@@ -4,10 +4,13 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 
 import com.sh.study.udacitynano.planner.R;
+import com.sh.study.udacitynano.planner.constants.SHDebug;
 
 /**
  * Temporary class for Mockups
@@ -35,5 +38,14 @@ public class AddCategoryActivity extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+//        SHDebug.debugTag(CLASS_NAME, "onCreateOptionsMenu:Start");
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_add_category, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
 
 }

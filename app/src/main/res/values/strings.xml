@@ -3,4 +3,7 @@
     <string name="app_name">Planner</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_add_category">AddCategoryActivity</string>
+    <string name="widget_title">Active Event in Capstone, Stage 1 - Design, started at 12:47</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

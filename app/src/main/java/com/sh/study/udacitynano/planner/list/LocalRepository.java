@@ -66,14 +66,24 @@ public class LocalRepository {
         public void onOpen (SupportSQLiteDatabase db){
             //first delete existing data and insert laates deals
             db.execSQL("Delete From category");
-
             ContentValues contentValues = new ContentValues();
-            contentValues.put("name", "Projekty");
+
+            contentValues = new ContentValues();
+            contentValues.put("name", "Popular Movies");
             contentValues.put("parent_id", 0);
             db.insert("category", OnConflictStrategy.IGNORE, contentValues);
 
             contentValues = new ContentValues();
-            contentValues.put("name", "Inne");
+            contentValues.put("name", "Build It Bigger");
+            contentValues.put("parent_id", 0);
+            db.insert("category", OnConflictStrategy.IGNORE, contentValues);
+
+            contentValues.put("name", "Capstone, Stage 1 - Design");
+            contentValues.put("parent_id", 0);
+            db.insert("category", OnConflictStrategy.IGNORE, contentValues);
+
+            contentValues = new ContentValues();
+            contentValues.put("name", "Capstone, Stage 2 - Build");
             contentValues.put("parent_id", 0);
             db.insert("category", OnConflictStrategy.IGNORE, contentValues);
         }

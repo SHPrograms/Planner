@@ -5,7 +5,22 @@
 
     <item android:id="@+id/action_search"
         android:title="Search"
+        android:orderInCategory="100"
         android:icon="@android:drawable/ic_menu_search"
-        app:showAsAction="ifRoom|collapseActionView"
+        app:showAsAction="always|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView"/>
+
+    <item
+        android:id="@+id/action_filter"
+        android:orderInCategory="100"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="Filter"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:icon="@android:drawable/ic_menu_send"
+        android:title="Settings"
+        app:showAsAction="always" />
 </menu>
