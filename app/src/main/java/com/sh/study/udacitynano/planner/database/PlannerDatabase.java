@@ -1,17 +1,22 @@
 package com.sh.study.udacitynano.planner.database;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
+import android.content.ContentValues;
 import android.content.Context;
 
 import com.sh.study.udacitynano.planner.constants.SHDebug;
 
 /**
  * Main activity. List of triggers, categories
- * Based on {@Link "https://github.com/udacity/ud851-Exercises/tree/student/Lesson09b-ToDo-List-AAC"}
  *
+ * Based on {@Link "https://github.com/udacity/ud851-Exercises/tree/student/Lesson09b-ToDo-List-AAC"}
+ * Based on {@link "https://github.com/googlecodelabs/android-build-an-app-architecture-components"}
+ * based on {@link "http://www.zoftino.com/android-search-functionality-using-searchview-and-room"}
  *
  * @author Sławomir Hagiel
  * @version 1.0
@@ -33,6 +38,8 @@ public abstract class PlannerDatabase extends RoomDatabase {
                 SHDebug.debugTag(CLASS_NAME, "getInstance:create");
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         PlannerDatabase.class, PlannerDatabase.DATABASE_NAME)
+                        .fallbackToDestructiveMigration()
+                        .addCallback(callback) // TODO: temporary!
                         .build();
             }
         }
@@ -40,7 +47,38 @@ public abstract class PlannerDatabase extends RoomDatabase {
     }
 
     public abstract EventDao eventDao();
+
     public abstract CategoryDao categoryDao();
 
+    // TODO: Temporary!
+    private static RoomDatabase.Callback callback = new RoomDatabase.Callback() {
+        public void onCreate(SupportSQLiteDatabase db) {
 
+        }
+
+        public void onOpen(SupportSQLiteDatabase db) {
+            db.execSQL("Delete From category");
+
+            ContentValues contentValues;
+
+            contentValues = new ContentValues();
+            contentValues.put("name", "Popular Movies");
+            contentValues.put("parent_id", 0);
+            db.insert("category", OnConflictStrategy.IGNORE, contentValues);
+
+            contentValues = new ContentValues();
+            contentValues.put("name", "Build It Bigger");
+            contentValues.put("parent_id", 0);
+            db.insert("category", OnConflictStrategy.IGNORE, contentValues);
+
+            contentValues.put("name", "Capstone, Stage 1 - Design");
+            contentValues.put("parent_id", 0);
+            db.insert("category", OnConflictStrategy.IGNORE, contentValues);
+
+            contentValues = new ContentValues();
+            contentValues.put("name", "Capstone, Stage 2 - Build");
+            contentValues.put("parent_id", 0);
+            db.insert("category", OnConflictStrategy.IGNORE, contentValues);
+        }
+    };
 }

@@ -1,26 +1,18 @@
 package com.sh.study.udacitynano.planner.list;
 
-import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.facebook.stetho.Stetho;
 import com.sh.study.udacitynano.planner.R;
 import com.sh.study.udacitynano.planner.constants.SHDebug;
-import com.sh.study.udacitynano.planner.database.CategoryEntity;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,7 +35,8 @@ public class ListActivity extends AppCompatActivity {
     public ListView listView;
 
     private SearchView searchView;
-    private LocalRepository localRepository = new LocalRepository();
+    private ListViewModel viewModel;
+//    private LocalRepository localRepository = new LocalRepository();
 
     private static final String CLASS_NAME = "ListActivity";
 
@@ -58,6 +51,9 @@ public class ListActivity extends AppCompatActivity {
 //        Stetho.initializeWithDefaults(this);
 
         setSupportActionBar(toolbar);
+
+        ListViewModelFactory factory = InjectorUtils.provideListActivityViewModelFactory(this.getApplicationContext());
+        viewModel = ViewModelProviders.of(this, factory).get(ListViewModel.class);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,32 +85,27 @@ public class ListActivity extends AppCompatActivity {
             new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    getDealsFromDb(query);
+                    getFilteredCategories(query);
                     return true;
                 }
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
-                    getDealsFromDb(newText);
+                    getFilteredCategories(newText);
                     return true;
                 }
 
-                private void getDealsFromDb(String searchText) {
+                private void getFilteredCategories(String searchText) {
                     searchText = "%"+searchText+"%";
-                    localRepository.getDealsListInfo(ListActivity.this, searchText)
-                            .observe(ListActivity.this, new Observer<List<CategoryEntity>>() {
-                                @Override
-                                public void onChanged(@Nullable List<CategoryEntity> deals) {
-                                    if (deals == null) {
-                                        return;
-                                    }
-                                    DealsListViewAdapter adapter = new DealsListViewAdapter(
-                                            ListActivity.this,
-                                            R.layout.deal_item_layout, deals);
-                                    listView.setAdapter(adapter);
-
-                                }
-                            });
+                    viewModel.getCategories(searchText).observe(ListActivity.this, categoryEntities -> {
+                        if (categoryEntities == null) {
+                            return;
+                        }
+                        DealsListViewAdapter adapter = new DealsListViewAdapter(
+                                ListActivity.this,
+                                R.layout.deal_item_layout, categoryEntities);
+                        listView.setAdapter(adapter);
+                    });
                 }
             };
 
