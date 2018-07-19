@@ -1,4 +1,4 @@
-package com.sh.study.udacitynano.planner.list;
+package com.sh.study.udacitynano.planner.ui.list;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
@@ -12,17 +12,17 @@ import com.sh.study.udacitynano.planner.database.DatabaseRepository;
  * @version 1.0
  * @since 2018-07-19
  */
-class ListViewModelFactory extends ViewModelProvider.NewInstanceFactory {
+public class ListViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
-    private final DatabaseRepository mRepository;
+    private final DatabaseRepository repository;
 
     public ListViewModelFactory(DatabaseRepository repository) {
-        this.mRepository = repository;
+        this.repository = repository;
     }
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
         //noinspection unchecked
-        return (T) new ListViewModel(mRepository);
+        return (T) new ListViewModel(repository);
     }
 }

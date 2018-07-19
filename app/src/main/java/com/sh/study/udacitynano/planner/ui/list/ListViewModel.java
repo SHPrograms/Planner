@@ -1,4 +1,4 @@
-package com.sh.study.udacitynano.planner.list;
+package com.sh.study.udacitynano.planner.ui.list;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
@@ -10,8 +10,6 @@ import java.util.List;
 
 /**
  * ViewModel for main view - List
- *
- * Access to database repo
  *
  * @author Sławomir Hagiel
  * @version 1.0

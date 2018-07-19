@@ -7,13 +7,11 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
-import android.database.Cursor;
 
 import java.util.List;
 
 /**
- * Operations on table category
- *
+ * Category interface
  *
  * @author Sławomir Hagiel
  * @version 1.0
@@ -36,6 +34,6 @@ public interface CategoryDao {
     @Query("SELECT * FROM category WHERE parent_id = :id ORDER BY name")
     LiveData<CategoryEntity> loadCategoriesByParentId(int id);
 
-    @Query("SELECT * FROM category WHERE name LIKE :dealText")
-    LiveData<List<CategoryEntity>> getDealsList(String dealText);
+    @Query("SELECT * FROM category WHERE name LIKE :filteredText")
+    LiveData<List<CategoryEntity>> loadCategoriesByText(String filteredText);
 }

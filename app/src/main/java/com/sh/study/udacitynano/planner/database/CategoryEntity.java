@@ -5,11 +5,8 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
-import java.util.Date;
-
 /**
- * Categories
- *
+ * Category object
  *
  * @author Sławomir Hagiel
  * @version 1.0
@@ -20,28 +17,22 @@ public class CategoryEntity {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
+
     private String name;
+
     @ColumnInfo(name = "parent_id")
     private int parentId;
-/*
-    @ColumnInfo(name = "updated_at")
-    private Date updatedAt;
-*/
 
     @Ignore
-//    public CategoryEntity(String name, int parentId, Date updatedAt) {
-      public CategoryEntity(String name, int parentId) {
+    public CategoryEntity(String name, int parentId) {
         this.name = name;
         this.parentId = parentId;
-//        this.updatedAt = updatedAt;
     }
 
-//    public CategoryEntity(int id, String name, int parentId, Date updatedAt) {
     public CategoryEntity(int id, String name, int parentId) {
         this.id = id;
         this.name = name;
         this.parentId = parentId;
-//        this.updatedAt = updatedAt;
     }
 
     public int getId() {
@@ -67,14 +58,4 @@ public class CategoryEntity {
     public void setParentId(int parentId) {
         this.parentId = parentId;
     }
-
-/*
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-*/
 }

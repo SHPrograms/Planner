@@ -1,4 +1,4 @@
-package com.sh.study.udacitynano.planner.list;
+package com.sh.study.udacitynano.planner.ui.category;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -9,20 +9,20 @@ import android.view.ViewGroup;
 import com.sh.study.udacitynano.planner.R;
 
 /**
- * Temporary class for Mockups
+ * Single category fragment
  *
  * @author Sławomir Hagiel
  * @version 1.0
  * @since 2018-07-09
  */
-public class AddCategoryActivityFragment extends Fragment {
+public class CategoryFragment extends Fragment {
 
-    public AddCategoryActivityFragment() {
+    public CategoryFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_add_category, container, false);
+        return inflater.inflate(R.layout.fragment_category, container, false);
     }
 }

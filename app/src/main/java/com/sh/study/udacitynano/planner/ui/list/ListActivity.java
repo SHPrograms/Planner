@@ -1,4 +1,4 @@
-package com.sh.study.udacitynano.planner.list;
+package com.sh.study.udacitynano.planner.ui.list;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -7,18 +7,20 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.widget.ListView;
 
+import com.sh.study.udacitynano.planner.utils.InjectorUtils;
+import com.sh.study.udacitynano.planner.ui.category.CategoryActivity;
 import com.sh.study.udacitynano.planner.R;
+import com.sh.study.udacitynano.planner.ui.search.FilteredListViewAdapter;
 import com.sh.study.udacitynano.planner.constants.SHDebug;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Main activity. List of triggers, categories
+ * Main list activity.
  *
  * Search function based on {@link "http://www.zoftino.com/android-search-functionality-using-searchview-and-room"}
  *
@@ -36,7 +38,6 @@ public class ListActivity extends AppCompatActivity {
 
     private SearchView searchView;
     private ListViewModel viewModel;
-//    private LocalRepository localRepository = new LocalRepository();
 
     private static final String CLASS_NAME = "ListActivity";
 
@@ -55,12 +56,9 @@ public class ListActivity extends AppCompatActivity {
         ListViewModelFactory factory = InjectorUtils.provideListActivityViewModelFactory(this.getApplicationContext());
         viewModel = ViewModelProviders.of(this, factory).get(ListViewModel.class);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent addCategory = new Intent(ListActivity.this, AddCategoryActivity.class);
-                startActivity(addCategory);
-            }
+        fab.setOnClickListener(view -> {
+            Intent addCategory = new Intent(ListActivity.this, CategoryActivity.class);
+            startActivity(addCategory);
         });
 
         SHDebug.debugTag(CLASS_NAME, "onCreate:End");
@@ -69,11 +67,8 @@ public class ListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         SHDebug.debugTag(CLASS_NAME, "onCreateOptionsMenu:Start");
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_list, menu);
 
-
-        // Search view:
         searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(onQueryTextListener);
@@ -81,8 +76,7 @@ public class ListActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private SearchView.OnQueryTextListener onQueryTextListener =
-            new SearchView.OnQueryTextListener() {
+    private SearchView.OnQueryTextListener onQueryTextListener = new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
                     getFilteredCategories(query);
@@ -101,9 +95,9 @@ public class ListActivity extends AppCompatActivity {
                         if (categoryEntities == null) {
                             return;
                         }
-                        DealsListViewAdapter adapter = new DealsListViewAdapter(
+                        FilteredListViewAdapter adapter = new FilteredListViewAdapter(
                                 ListActivity.this,
-                                R.layout.deal_item_layout, categoryEntities);
+                                R.layout.filtered_item_layout, categoryEntities);
                         listView.setAdapter(adapter);
                     });
                 }

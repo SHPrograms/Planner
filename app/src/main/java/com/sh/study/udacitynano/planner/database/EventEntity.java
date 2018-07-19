@@ -8,8 +8,7 @@ import android.arch.persistence.room.PrimaryKey;
 import java.util.Date;
 
 /**
- * Events
- *
+ * Event object
  *
  * @author Sławomir Hagiel
  * @version 1.0
@@ -20,35 +19,36 @@ public class EventEntity {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
+
     @ColumnInfo(name = "date_start")
     private Date dateStart;
+
     @ColumnInfo(name = "date_end")
     private Date dateEnd;
+
     private long time;
+
     private String description;
+
     @ColumnInfo(name = "category_id")
     private int categoryId;
-    @ColumnInfo(name = "updated_at")
-    private Date updatedAt;
 
     @Ignore
-    public EventEntity(Date dateStart, Date dateEnd, long time, String description, int categoryId, Date updatedAt) {
+    public EventEntity(Date dateStart, Date dateEnd, long time, String description, int categoryId) {
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.time = time;
         this.description = description;
         this.categoryId = categoryId;
-        this.updatedAt = updatedAt;
     }
 
-    public EventEntity(int id, Date dateStart, Date dateEnd, long time, String description, int categoryId, Date updatedAt) {
+    public EventEntity(int id, Date dateStart, Date dateEnd, long time, String description, int categoryId) {
         this.id = id;
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.time = time;
         this.description = description;
         this.categoryId = categoryId;
-        this.updatedAt = updatedAt;
     }
 
     public int getId() {
@@ -97,13 +97,5 @@ public class EventEntity {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

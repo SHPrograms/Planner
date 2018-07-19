@@ -11,8 +11,7 @@ import android.arch.persistence.room.Update;
 import java.util.List;
 
 /**
- * Operations on table event
- *
+ * Event interface
  *
  * @author Sławomir Hagiel
  * @version 1.0

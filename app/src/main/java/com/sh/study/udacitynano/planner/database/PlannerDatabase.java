@@ -12,17 +12,18 @@ import android.content.Context;
 import com.sh.study.udacitynano.planner.constants.SHDebug;
 
 /**
- * Main activity. List of triggers, categories
+ * Database instance
  *
- * Based on {@Link "https://github.com/udacity/ud851-Exercises/tree/student/Lesson09b-ToDo-List-AAC"}
- * Based on {@link "https://github.com/googlecodelabs/android-build-an-app-architecture-components"}
- * based on {@link "http://www.zoftino.com/android-search-functionality-using-searchview-and-room"}
+ * Adventure with Android Architecture Components wouldn't be possible without support from:
+ * {@Link "https://github.com/udacity/ud851-Exercises/tree/student/Lesson09b-ToDo-List-AAC"}
+ * {@link "https://github.com/googlecodelabs/android-build-an-app-architecture-components"}
+ * {@link "http://www.zoftino.com/android-search-functionality-using-searchview-and-room"}
  *
  * @author Sławomir Hagiel
  * @version 1.0
  * @since 2018-07-13
  */
-@Database(entities = {EventEntity.class, CategoryEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {EventEntity.class, CategoryEntity.class}, version = 2, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract class PlannerDatabase extends RoomDatabase {
     private static final String CLASS_NAME = "PlannerDatabase";
@@ -59,14 +60,12 @@ public abstract class PlannerDatabase extends RoomDatabase {
         public void onOpen(SupportSQLiteDatabase db) {
             db.execSQL("Delete From category");
 
-            ContentValues contentValues;
+            ContentValues contentValues = new ContentValues();
 
-            contentValues = new ContentValues();
             contentValues.put("name", "Popular Movies");
             contentValues.put("parent_id", 0);
             db.insert("category", OnConflictStrategy.IGNORE, contentValues);
 
-            contentValues = new ContentValues();
             contentValues.put("name", "Build It Bigger");
             contentValues.put("parent_id", 0);
             db.insert("category", OnConflictStrategy.IGNORE, contentValues);
@@ -75,7 +74,6 @@ public abstract class PlannerDatabase extends RoomDatabase {
             contentValues.put("parent_id", 0);
             db.insert("category", OnConflictStrategy.IGNORE, contentValues);
 
-            contentValues = new ContentValues();
             contentValues.put("name", "Capstone, Stage 2 - Build");
             contentValues.put("parent_id", 0);
             db.insert("category", OnConflictStrategy.IGNORE, contentValues);

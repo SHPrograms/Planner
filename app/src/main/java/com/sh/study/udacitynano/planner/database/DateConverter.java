@@ -5,9 +5,6 @@ import android.arch.persistence.room.TypeConverter;
 import java.util.Date;
 /**
  * Date converter
- * Based on {@link "https://medium.com/@chrisbanes/room-time-2b4cf9672b98"}
- * Based on {@Link "https://github.com/udacity/ud851-Exercises/tree/student/Lesson09b-ToDo-List-AAC"}
- *
  *
  * @author Sławomir Hagiel
  * @version 1.0

@@ -1,4 +1,4 @@
-package com.sh.study.udacitynano.planner.list;
+package com.sh.study.udacitynano.planner.ui.search;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -22,13 +22,13 @@ import java.util.List;
  * @version 1.0
  * @since 2018-07-16
  */
-public class DealsListViewAdapter extends ArrayAdapter {
+public class FilteredListViewAdapter extends ArrayAdapter {
 
     private List<CategoryEntity> dataList;
     private Context mContext;
     private int searchResultItemLayout;
 
-    public DealsListViewAdapter(Context context, int resource, List<CategoryEntity> storeSourceDataLst) {
+    public FilteredListViewAdapter(Context context, int resource, List<CategoryEntity> storeSourceDataLst) {
         super(context, resource, storeSourceDataLst);
         dataList = storeSourceDataLst;
         mContext = context;

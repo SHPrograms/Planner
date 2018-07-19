@@ -1,4 +1,4 @@
-package com.sh.study.udacitynano.planner;
+package com.sh.study.udacitynano.planner.utils;
 
 /*
  * Copyright (C) 2017 The Android Open Source Project

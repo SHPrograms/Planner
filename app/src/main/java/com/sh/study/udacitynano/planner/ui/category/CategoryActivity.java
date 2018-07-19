@@ -1,30 +1,28 @@
-package com.sh.study.udacitynano.planner.list;
+package com.sh.study.udacitynano.planner.ui.category;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 
 import com.sh.study.udacitynano.planner.R;
-import com.sh.study.udacitynano.planner.constants.SHDebug;
 
 /**
- * Temporary class for Mockups
+ * Single category activity
  *
  * @author Sławomir Hagiel
  * @version 1.0
  * @since 2018-07-09
  */
-public class AddCategoryActivity extends AppCompatActivity {
+public class CategoryActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_category);
+        setContentView(R.layout.activity_category);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -43,7 +41,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 //        SHDebug.debugTag(CLASS_NAME, "onCreateOptionsMenu:Start");
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_category, menu);
+        getMenuInflater().inflate(R.menu.menu_category, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

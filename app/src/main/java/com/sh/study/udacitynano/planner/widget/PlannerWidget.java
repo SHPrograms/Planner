@@ -3,7 +3,6 @@ package com.sh.study.udacitynano.planner.widget;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
-import android.view.View;
 import android.widget.RemoteViews;
 
 import com.sh.study.udacitynano.planner.R;
@@ -11,13 +10,13 @@ import com.sh.study.udacitynano.planner.R;
 /**
  * Implementation of App Widget functionality.
  */
-public class Planner2Widget extends AppWidgetProvider {
+public class PlannerWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         CharSequence widgetText = context.getString(R.string.appwidget_text);
         // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.planner2_widget);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.planner_widget);
 //        views.setTextViewText(R.id.appwidget_text, widgetText);
 
         // Instruct the widget manager to update the widget

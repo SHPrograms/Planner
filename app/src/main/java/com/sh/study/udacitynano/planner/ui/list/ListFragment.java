@@ -1,4 +1,4 @@
-package com.sh.study.udacitynano.planner.list;
+package com.sh.study.udacitynano.planner.ui.list;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Fragment for Main activity. List of triggers, categories
+ * Main list Fragment
  *
  * @author Sławomir Hagiel
  * @version 1.0

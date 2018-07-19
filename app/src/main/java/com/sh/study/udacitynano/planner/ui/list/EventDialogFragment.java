@@ -1,4 +1,4 @@
-package com.sh.study.udacitynano.planner.list;
+package com.sh.study.udacitynano.planner.ui.list;
 
 import android.app.Dialog;
 import android.support.v4.app.DialogFragment;
@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Temporary class for Mockups
+ *
  *
  * TODO: Import / Export data
  *
