@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.sh.study.udacitynano.planner.R;
@@ -44,6 +45,4 @@ public class CategoryActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_category, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
-
 }

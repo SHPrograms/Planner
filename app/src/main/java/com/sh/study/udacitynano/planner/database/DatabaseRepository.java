@@ -39,7 +39,6 @@ public class DatabaseRepository {
         return sInstance;
     }
 
-    // TODO: THis part I can receive from ListViewModel where I got all categories from getCategoriesFromDB()
     public LiveData<List<CategoryEntity>> getFilteredCategoriesFromDB(String query){
         SHDebug.debugTag(CLASS_NAME, "getFilteredCategoriesFromDB");
         return plannerDatabase.categoryDao().loadCategoriesByText(query);

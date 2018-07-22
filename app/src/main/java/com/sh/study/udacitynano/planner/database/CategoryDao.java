@@ -32,7 +32,7 @@ public interface CategoryDao {
     LiveData<List<CategoryEntity>> loadAllCategories();
 
     @Query("SELECT * FROM category WHERE parent_id = :id ORDER BY name")
-    LiveData<CategoryEntity> loadCategoriesByParentId(int id);
+    LiveData<List<CategoryEntity>> loadCategoriesByParentId(int id);
 
     @Query("SELECT * FROM category WHERE name LIKE :filteredText")
     LiveData<List<CategoryEntity>> loadCategoriesByText(String filteredText);

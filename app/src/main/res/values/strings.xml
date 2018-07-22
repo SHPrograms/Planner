@@ -1,6 +1,12 @@
 <resources>
     <!--Global-->
     <string name="app_name">Planner</string>
+    <!--menu_list-->
+    <string name="menu_list_item_action_search">Search</string>
+    <string name="menu_list_item_action_filter">Active categories</string>
+    <string name="menu_list_item_action_data">Export database</string>
+
+
 
     <!--TODO: temporary -->
     <string name="action_settings">Settings</string>

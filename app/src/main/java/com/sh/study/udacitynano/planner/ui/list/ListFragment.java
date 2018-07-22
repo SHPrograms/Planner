@@ -1,14 +1,28 @@
 package com.sh.study.udacitynano.planner.ui.list;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.sh.study.udacitynano.planner.R;
 import com.sh.study.udacitynano.planner.constants.SHDebug;
+import com.sh.study.udacitynano.planner.database.CategoryEntity;
+import com.sh.study.udacitynano.planner.utils.InjectorUtils;
 
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -19,12 +33,55 @@ import butterknife.Unbinder;
  * @version 1.0
  * @since 2018-07-09
  */
-public class ListFragment extends Fragment {
+public class ListFragment {};
+/*
+
+        extends Fragment implements ListInterface {
+    @BindView(R.id.search_results_list)
+    RecyclerView recyclerView;
+
     private static final String CLASS_NAME = "ListFragment";
     private Unbinder unbinder;
+    private ListAdapter listAdapter;
+    private ListInterface listClickListener;
+    private ListViewModel listViewModel;
+    private SearchView searchView;
+
 
     public ListFragment() {
         SHDebug.debugTag(CLASS_NAME, "constructor");
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        SHDebug.debugTag(CLASS_NAME, "onAttach");
+        if (context instanceof ListInterface) {
+            listClickListener = (ListInterface) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement ListInterface");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        SHDebug.debugTag(CLASS_NAME, "onDetach");
+        listClickListener = null;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        SHDebug.debugTag(CLASS_NAME, "onCreate");
+        try {
+            ListViewModelFactory factory = InjectorUtils.provideListActivityViewModelFactory(getActivity().getApplicationContext());
+            listViewModel = ViewModelProviders.of(getActivity(), factory).get(ListViewModel.class);
+
+        } catch (NullPointerException e) {
+            throw new NullPointerException();
+        }
     }
 
     @Override
@@ -33,6 +90,23 @@ public class ListFragment extends Fragment {
         SHDebug.debugTag(CLASS_NAME, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        listAdapter = new ListAdapter(this);
+        recyclerView.setAdapter(listAdapter);
+
+//        listViewModel.getAllCategories().observe(getActivity(), categories -> listAdapter.setDataList(categories));
+
+//        listViewModel.getCategories().observe(getActivity(), categories -> listAdapter.setDataList(categories));
+
+        listViewModel.getCategories().observeForever(new Observer<List<CategoryEntity>>() {
+            @Override
+            public void onChanged(@Nullable List<CategoryEntity> categoryEntities) {
+                listAdapter.setDataList(categoryEntities);
+            }
+        });
+
+//        listAdapter.setDataList(listViewModel.getAllCategories());
 
         return view;
     }
@@ -44,3 +118,4 @@ public class ListFragment extends Fragment {
         unbinder.unbind();
     }
 }
+*/
