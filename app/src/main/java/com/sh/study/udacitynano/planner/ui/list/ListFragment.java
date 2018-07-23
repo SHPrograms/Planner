@@ -35,8 +35,6 @@ public class ListFragment extends Fragment implements ListInterface {
     public ListAdapter listAdapter;
     private ListInterface listClickListener;
     private ListViewModel listViewModel;
-    private SearchView searchView;
-
 
     public ListFragment() {
         SHDebug.debugTag(CLASS_NAME, "constructor");
@@ -85,7 +83,12 @@ public class ListFragment extends Fragment implements ListInterface {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         listAdapter = new ListAdapter(this);
         recyclerView.setAdapter(listAdapter);
+
         listViewModel.getAllCategories(ListPreferences.getListStatusPreferences(getContext())).observe(getActivity(), categoryEntities -> listAdapter.setDataList(categoryEntities));
+
+        // TODO: V2
+//        listViewModel.getAllData(ListPreferences.getListStatusPreferences(getContext())).observe(getActivity(), categoryEntities -> listAdapter.setDataList(categoryEntities));
+
         return view;
     }
 

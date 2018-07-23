@@ -113,7 +113,6 @@ public class ListActivity extends AppCompatActivity {
         if (ListPreferences.getListStatusPreferences(this)) {
             menu.findItem(R.id.menu_list_item_action_filter).setIcon(ContextCompat.getDrawable(this, android.R.drawable.checkbox_on_background));
         } else {
-            ListPreferences.setListStatusPreferences(this, true);
             menu.findItem(R.id.menu_list_item_action_filter).setIcon(ContextCompat.getDrawable(this, android.R.drawable.checkbox_off_background));
         }
         return super.onPrepareOptionsMenu(menu);
@@ -124,6 +123,13 @@ public class ListActivity extends AppCompatActivity {
         viewModel.getCategories(ListPreferences.getListStatusPreferences(this), searchText).observe(ListActivity.this, categoryEntities -> {
             fragment.listAdapter.setDataList(categoryEntities);
         });
+
+        //TODO: V2
+/*
+        viewModel.getData(ListPreferences.getListStatusPreferences(this), searchText).observe(ListActivity.this, categoryEntities -> {
+            fragment.listAdapter.setDataList(categoryEntities);
+        });
+*/
     }
 
     /**
