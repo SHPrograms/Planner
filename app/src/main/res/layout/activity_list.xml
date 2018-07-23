@@ -22,7 +22,8 @@
 
     </android.support.design.widget.AppBarLayout>
 
-<!--    <include layout="@layout/content_list" />-->
+    <include layout="@layout/content_list" />
+<!--
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -41,6 +42,7 @@
             app:layout_constraintRight_toRightOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
+-->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

@@ -23,16 +23,20 @@ public class CategoryEntity {
     @ColumnInfo(name = "parent_id")
     private int parentId;
 
+    private boolean status;
+
     @Ignore
-    public CategoryEntity(String name, int parentId) {
+    public CategoryEntity(String name, int parentId, boolean status) {
         this.name = name;
         this.parentId = parentId;
+        this.status = status;
     }
 
-    public CategoryEntity(int id, String name, int parentId) {
+    public CategoryEntity(int id, String name, int parentId, boolean status) {
         this.id = id;
         this.name = name;
         this.parentId = parentId;
+        this.status = status;
     }
 
     public int getId() {
@@ -57,5 +61,13 @@ public class CategoryEntity {
 
     public void setParentId(int parentId) {
         this.parentId = parentId;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

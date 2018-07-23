@@ -44,19 +44,19 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListAdapterViewHolder
     public ListAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.filtered_item_layout, parent, false);
-        SHDebug.debugTag(CLASS_NAME, "onCreateViewHolder");
+//        SHDebug.debugTag(CLASS_NAME, "onCreateViewHolder");
         return new ListAdapterViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ListAdapterViewHolder holder, int position) {
-        SHDebug.debugTag(CLASS_NAME, "onBindViewHolder, position = " + position);
+//        SHDebug.debugTag(CLASS_NAME, "onBindViewHolder, position = " + position);
         holder.itemName.setText(String.valueOf(dataList.get(position).getName()));
     }
 
     @Override
     public int getItemCount() {
-        SHDebug.debugTag(CLASS_NAME, "getItemCount");
+//        SHDebug.debugTag(CLASS_NAME, "getItemCount");
         if (dataList == null) return 0;
         else return dataList.size();
     }

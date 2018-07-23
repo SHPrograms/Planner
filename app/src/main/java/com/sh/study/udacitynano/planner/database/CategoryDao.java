@@ -19,21 +19,62 @@ import java.util.List;
  */
 @Dao
 public interface CategoryDao {
+    /**
+     * Instert category
+     * @param categoryEntity
+     */
     @Insert
     void insertCategory(CategoryEntity categoryEntity);
 
+    /**
+     * Update category
+     * @param categoryEntity
+     */
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateCategory(CategoryEntity categoryEntity);
 
+    /**
+     * Delete category
+     * @param categoryEntity
+     */
     @Delete
     void deleteCategory(CategoryEntity categoryEntity);
 
-    @Query("SELECT * FROM category ORDER BY name")
+    /**
+     * Fetch all categories
+     * @return list of categories
+     */
+    @Query("SELECT * FROM category ORDER BY status, name")
     LiveData<List<CategoryEntity>> loadAllCategories();
 
-    @Query("SELECT * FROM category WHERE parent_id = :id ORDER BY name")
-    LiveData<List<CategoryEntity>> loadCategoriesByParentId(int id);
+    /**
+     * Fetch all active categories
+     * @return list of categories
+     */
+    @Query("SELECT * FROM category WHERE status = 1 ORDER BY status, name")
+    LiveData<List<CategoryEntity>> loadActiveCategories();
 
-    @Query("SELECT * FROM category WHERE name LIKE :filteredText")
+    /**
+     * Search around all categories
+     * @param filteredText Fetch categories where name contain filtered text
+     * @return list of filtered categories
+     */
+    @Query("SELECT * FROM category WHERE name LIKE :filteredText ORDER BY status, name")
     LiveData<List<CategoryEntity>> loadCategoriesByText(String filteredText);
+
+    /**
+     * Search around active categories
+     * @param filteredText Fetch categories where name contain filtered text
+     * @return list of active and filtered categories
+     */
+    @Query("SELECT * FROM category WHERE status = 1 AND name LIKE :filteredText ORDER BY status, name")
+    LiveData<List<CategoryEntity>> loadActiveCategoriesByText(String filteredText);
+
+    /**
+     * We can't delete category when there exist subcategory
+     * @param id Id of category to check if is not as parent
+     * @return First existing record
+     */
+    @Query("SELECT * FROM category WHERE parent_id = :id LIMIT 1")
+    LiveData<List<CategoryEntity>> isCategoryAsParent(int id);
 }

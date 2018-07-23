@@ -39,13 +39,15 @@ public class DatabaseRepository {
         return sInstance;
     }
 
-    public LiveData<List<CategoryEntity>> getFilteredCategoriesFromDB(String query){
+    public LiveData<List<CategoryEntity>> getFilteredCategoriesFromDB(boolean active, String query){
         SHDebug.debugTag(CLASS_NAME, "getFilteredCategoriesFromDB");
-        return plannerDatabase.categoryDao().loadCategoriesByText(query);
+        if (active) return plannerDatabase.categoryDao().loadActiveCategoriesByText(query);
+        else return plannerDatabase.categoryDao().loadCategoriesByText(query);
     }
 
-    public LiveData<List<CategoryEntity>> getCategoriesFromDB() {
+    public LiveData<List<CategoryEntity>> getCategoriesFromDB(boolean active) {
         SHDebug.debugTag(CLASS_NAME, "getCategoriesFromDB");
-        return plannerDatabase.categoryDao().loadAllCategories();
+        if (active) return plannerDatabase.categoryDao().loadActiveCategories();
+        else return plannerDatabase.categoryDao().loadAllCategories();
     }
 }

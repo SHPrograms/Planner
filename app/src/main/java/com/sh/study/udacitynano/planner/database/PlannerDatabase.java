@@ -23,7 +23,7 @@ import com.sh.study.udacitynano.planner.constants.SHDebug;
  * @version 1.0
  * @since 2018-07-13
  */
-@Database(entities = {EventEntity.class, CategoryEntity.class}, version = 2, exportSchema = false)
+@Database(entities = {EventEntity.class, CategoryEntity.class}, version = 3, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract class PlannerDatabase extends RoomDatabase {
     private static final String CLASS_NAME = "PlannerDatabase";
@@ -64,18 +64,22 @@ public abstract class PlannerDatabase extends RoomDatabase {
 
             contentValues.put("name", "Popular Movies");
             contentValues.put("parent_id", 0);
+            contentValues.put("status", 0);
             db.insert("category", OnConflictStrategy.IGNORE, contentValues);
 
             contentValues.put("name", "Build It Bigger");
             contentValues.put("parent_id", 0);
+            contentValues.put("status", 0);
             db.insert("category", OnConflictStrategy.IGNORE, contentValues);
 
             contentValues.put("name", "Capstone, Stage 1 - Design");
             contentValues.put("parent_id", 0);
+            contentValues.put("status", 0);
             db.insert("category", OnConflictStrategy.IGNORE, contentValues);
 
             contentValues.put("name", "Capstone, Stage 2 - Build");
             contentValues.put("parent_id", 0);
+            contentValues.put("status", 1);
             db.insert("category", OnConflictStrategy.IGNORE, contentValues);
         }
     };

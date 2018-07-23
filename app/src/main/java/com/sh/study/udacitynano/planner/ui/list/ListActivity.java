@@ -4,14 +4,12 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.sh.study.udacitynano.planner.utils.InjectorUtils;
@@ -24,25 +22,21 @@ import butterknife.ButterKnife;
 
 /**
  * Main list activity.
- * <p>
- * Search function based on {@link "http://www.zoftino.com/android-search-functionality-using-searchview-and-room"}
  *
  * @author Sławomir Hagiel
  * @version 1.0
  * @since 2018-07-09
  */
-public class ListActivity extends AppCompatActivity implements ListInterface {
+public class ListActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
     @BindView(R.id.fab)
     public FloatingActionButton fab;
-    @BindView(R.id.search_results_list)
-    public RecyclerView recyclerView;
 
     private SearchView searchView;
     private ListViewModel viewModel;
-
-    private ListAdapter listAdapter;
+    private ListFragment fragment;
+    private String filteredText;
 
     private static final String CLASS_NAME = "ListActivity";
 
@@ -52,30 +46,24 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
         SHDebug.debugTag(CLASS_NAME, "onCreate:Start");
         setContentView(R.layout.activity_list);
         ButterKnife.bind(this);
-
         // TODO: Only for testing
 //        Stetho.initializeWithDefaults(this);
-
         setSupportActionBar(toolbar);
+
+        //TODO: FilteredText and status from onSaveInstanceState
+        // here
+        filteredText = "";
+
+        fragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
 
         ListViewModelFactory factory = InjectorUtils.provideListActivityViewModelFactory(this.getApplicationContext());
         viewModel = ViewModelProviders.of(this, factory).get(ListViewModel.class);
-
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        listAdapter = new ListAdapter(this);
-        recyclerView.setAdapter(listAdapter);
-
-        viewModel.getAllCategories().observe(ListActivity.this, items -> {
-            listAdapter.setDataList(items);
-        });
 
         fab.setOnClickListener(view -> {
             SHDebug.debugTag(CLASS_NAME, "fab.setOnClickListener:Start");
             Intent addCategory = new Intent(ListActivity.this, CategoryActivity.class);
             startActivity(addCategory);
         });
-
         SHDebug.debugTag(CLASS_NAME, "onCreate:End");
     }
 
@@ -83,11 +71,8 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
     public boolean onCreateOptionsMenu(Menu menu) {
         SHDebug.debugTag(CLASS_NAME, "onCreateOptionsMenu:Start");
         getMenuInflater().inflate(R.menu.menu_list, menu);
-
         searchView = (SearchView) menu.findItem(R.id.menu_list_item_action_search).getActionView();
-//        searchView.setSubmitButtonEnabled(false);
         searchView.setOnQueryTextListener(onQueryTextListener);
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -96,10 +81,23 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
         SHDebug.debugTag(CLASS_NAME, "onOptionsItemSelected:Start");
         switch (item.getItemId()) {
             case R.id.menu_list_item_action_search:
-                Toast.makeText(this, "search selected", Toast.LENGTH_SHORT).show();
+                // SearchView Filter for Categories
+                //Toast.makeText(this, "search selected", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_list_item_action_filter:
-                Toast.makeText(this, "filter selected", Toast.LENGTH_SHORT).show();
+                // Filter categories
+                if (ListPreferences.getListStatusPreferences(this)) {
+                    ListPreferences.setListStatusPreferences(this, false);
+                    item.setIcon(ContextCompat.getDrawable(this, android.R.drawable.checkbox_off_background));
+                    getFilteredCategories(filteredText);
+
+                    Toast.makeText(this, "All categories", Toast.LENGTH_SHORT).show();
+                } else {
+                    ListPreferences.setListStatusPreferences(this, true);
+                    item.setIcon(ContextCompat.getDrawable(this, android.R.drawable.checkbox_on_background));
+                    getFilteredCategories(filteredText);
+                    Toast.makeText(this, "Only active categories", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.menu_list_item_action_data:
                 Toast.makeText(this, "data selected", Toast.LENGTH_SHORT).show();
@@ -110,8 +108,26 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (ListPreferences.getListStatusPreferences(this)) {
+            menu.findItem(R.id.menu_list_item_action_filter).setIcon(ContextCompat.getDrawable(this, android.R.drawable.checkbox_on_background));
+        } else {
+            ListPreferences.setListStatusPreferences(this, true);
+            menu.findItem(R.id.menu_list_item_action_filter).setIcon(ContextCompat.getDrawable(this, android.R.drawable.checkbox_off_background));
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void getFilteredCategories(String searchText) {
+        this.filteredText = searchText;
+        viewModel.getCategories(ListPreferences.getListStatusPreferences(this), searchText).observe(ListActivity.this, categoryEntities -> {
+            fragment.listAdapter.setDataList(categoryEntities);
+        });
+    }
+
     /**
-     * Listener for search view in main list view
+     * SearchView Listener. Fetching data into RecyclerView in Fragment {R.id.fragment}
      */
     private SearchView.OnQueryTextListener onQueryTextListener = new SearchView.OnQueryTextListener() {
         @Override
@@ -126,18 +142,6 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
             SHDebug.debugTag(CLASS_NAME, "searchView.setOnQueryTextListener:onQueryTextChange, newText = " + newText);
             getFilteredCategories(newText);
             return true;
-        }
-
-
-        private void getFilteredCategories(String searchText) {
-            searchText = "%" + searchText + "%";
-
-            viewModel.getCategories(searchText).observe(ListActivity.this, categoryEntities -> {
-                if (categoryEntities == null) {
-                    return;
-                }
-                listAdapter.setDataList(categoryEntities);
-            });
         }
     };
 }
