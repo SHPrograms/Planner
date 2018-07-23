@@ -65,12 +65,14 @@ public class ListFragment extends Fragment implements ListInterface {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SHDebug.debugTag(CLASS_NAME, "onCreate");
+/*
         try {
             ListViewModelFactory factory = InjectorUtils.provideListActivityViewModelFactory(getActivity().getApplicationContext());
             listViewModel = ViewModelProviders.of(getActivity(), factory).get(ListViewModel.class);
         } catch (NullPointerException e) {
             throw new NullPointerException();
         }
+*/
     }
 
     @Override
@@ -83,11 +85,6 @@ public class ListFragment extends Fragment implements ListInterface {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         listAdapter = new ListAdapter(this);
         recyclerView.setAdapter(listAdapter);
-
-        listViewModel.getAllCategories(ListPreferences.getListStatusPreferences(getContext())).observe(getActivity(), categoryEntities -> listAdapter.setDataList(categoryEntities));
-
-        // TODO: V2
-//        listViewModel.getAllData(ListPreferences.getListStatusPreferences(getContext())).observe(getActivity(), categoryEntities -> listAdapter.setDataList(categoryEntities));
 
         return view;
     }

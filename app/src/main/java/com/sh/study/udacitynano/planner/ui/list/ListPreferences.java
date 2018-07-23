@@ -22,6 +22,7 @@ public final class ListPreferences {
      * @param context activity
      * @return
      */
+/*
     public static boolean getListStatusPreferences(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(LIST_PREF_STATUS, false);
     }
@@ -31,4 +32,5 @@ public final class ListPreferences {
                 .edit().putBoolean(LIST_PREF_STATUS, status)
                 .apply();
     }
+*/
 }

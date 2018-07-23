@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.sh.study.udacitynano.planner.constants.MyConstants;
 import com.sh.study.udacitynano.planner.utils.InjectorUtils;
 import com.sh.study.udacitynano.planner.ui.category.CategoryActivity;
 import com.sh.study.udacitynano.planner.R;
@@ -19,6 +20,7 @@ import com.sh.study.udacitynano.planner.constants.SHDebug;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 
 /**
  * Main list activity.
@@ -36,7 +38,6 @@ public class ListActivity extends AppCompatActivity {
     private SearchView searchView;
     private ListViewModel viewModel;
     private ListFragment fragment;
-    private String filteredText;
 
     private static final String CLASS_NAME = "ListActivity";
 
@@ -49,10 +50,6 @@ public class ListActivity extends AppCompatActivity {
         // TODO: Only for testing
 //        Stetho.initializeWithDefaults(this);
         setSupportActionBar(toolbar);
-
-        //TODO: FilteredText and status from onSaveInstanceState
-        // here
-        filteredText = "";
 
         fragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
 
@@ -73,6 +70,7 @@ public class ListActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_list, menu);
         searchView = (SearchView) menu.findItem(R.id.menu_list_item_action_search).getActionView();
         searchView.setOnQueryTextListener(onQueryTextListener);
+        searchView.setQuery(viewModel.getSearchText(), true);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -85,19 +83,17 @@ public class ListActivity extends AppCompatActivity {
                 //Toast.makeText(this, "search selected", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_list_item_action_filter:
-                // Filter categories
-                if (ListPreferences.getListStatusPreferences(this)) {
-                    ListPreferences.setListStatusPreferences(this, false);
+                if (viewModel.getStatus()) {
+                    viewModel.setStatus(false);
                     item.setIcon(ContextCompat.getDrawable(this, android.R.drawable.checkbox_off_background));
-                    getFilteredCategories(filteredText);
-
                     Toast.makeText(this, "All categories", Toast.LENGTH_SHORT).show();
                 } else {
-                    ListPreferences.setListStatusPreferences(this, true);
+                    viewModel.setStatus(true);
                     item.setIcon(ContextCompat.getDrawable(this, android.R.drawable.checkbox_on_background));
-                    getFilteredCategories(filteredText);
                     Toast.makeText(this, "Only active categories", Toast.LENGTH_SHORT).show();
                 }
+                // TODO: Temporary:
+                getFilteredCategories(MyConstants.SOURCE_STATUS, "");
                 break;
             case R.id.menu_list_item_action_data:
                 Toast.makeText(this, "data selected", Toast.LENGTH_SHORT).show();
@@ -110,7 +106,7 @@ public class ListActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (ListPreferences.getListStatusPreferences(this)) {
+        if (viewModel.getStatus()) {
             menu.findItem(R.id.menu_list_item_action_filter).setIcon(ContextCompat.getDrawable(this, android.R.drawable.checkbox_on_background));
         } else {
             menu.findItem(R.id.menu_list_item_action_filter).setIcon(ContextCompat.getDrawable(this, android.R.drawable.checkbox_off_background));
@@ -118,9 +114,8 @@ public class ListActivity extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    private void getFilteredCategories(String searchText) {
-        this.filteredText = searchText;
-        viewModel.getCategories(ListPreferences.getListStatusPreferences(this), searchText).observe(ListActivity.this, categoryEntities -> {
+    private void getFilteredCategories(String source, String searchText) {
+        viewModel.getCategories(source, searchText).observe(ListActivity.this, categoryEntities -> {
             fragment.listAdapter.setDataList(categoryEntities);
         });
 
@@ -139,14 +134,14 @@ public class ListActivity extends AppCompatActivity {
         @Override
         public boolean onQueryTextSubmit(String query) {
             SHDebug.debugTag(CLASS_NAME, "searchView.setOnQueryTextListener:onQueryTextSubmit, query = " + query);
-            getFilteredCategories(query);
+            getFilteredCategories(MyConstants.SOURCE_QUERY, query);
             return true;
         }
 
         @Override
         public boolean onQueryTextChange(String newText) {
             SHDebug.debugTag(CLASS_NAME, "searchView.setOnQueryTextListener:onQueryTextChange, newText = " + newText);
-            getFilteredCategories(newText);
+            getFilteredCategories(MyConstants.SOURCE_QUERY, newText);
             return true;
         }
     };
