@@ -5,6 +5,7 @@ import android.content.Context;
 import com.sh.study.udacitynano.planner.constants.SHDebug;
 import com.sh.study.udacitynano.planner.database.DatabaseRepository;
 import com.sh.study.udacitynano.planner.database.PlannerDatabase;
+import com.sh.study.udacitynano.planner.ui.category.CategoryViewModelFactory;
 import com.sh.study.udacitynano.planner.ui.list.ListViewModelFactory;
 
 /**
@@ -31,4 +32,12 @@ public class InjectorUtils {
         DatabaseRepository repository = provideRepository(context.getApplicationContext());
         return new ListViewModelFactory(repository);
     }
+
+    public static CategoryViewModelFactory provideCategoryActivityViewModelFactory(
+            Context context, int parentCategoryId, int mainCategoryId) {
+        SHDebug.debugTag(CLASS_NAME, "provideCategoryActivityViewModelFactory");
+        DatabaseRepository repository = provideRepository(context.getApplicationContext());
+        return new CategoryViewModelFactory(repository, parentCategoryId, mainCategoryId);
+    }
+
 }

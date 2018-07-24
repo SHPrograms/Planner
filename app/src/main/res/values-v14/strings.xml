@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!--menu_list-->
-    <string name="menu_list_item_action_search">Search</string>
-    <string name="menu_list_item_action_filter">Active categories</string>
-    <string name="menu_list_item_action_data">Export database</string>
-</resources>

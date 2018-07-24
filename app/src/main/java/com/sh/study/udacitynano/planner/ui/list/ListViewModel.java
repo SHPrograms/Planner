@@ -25,7 +25,7 @@ public class ListViewModel extends ViewModel {
     private final DatabaseRepository repository;
 
     private String searchText;
-    private final MutableLiveData<Boolean> status;
+    private boolean status;
 
     // TODO V2
 /*
@@ -45,10 +45,9 @@ public class ListViewModel extends ViewModel {
     ListViewModel(DatabaseRepository repository) {
         SHDebug.debugTag(CLASS_NAME, "constructor");
         this.repository = repository;
-        // TODO: Fetch data from sharedPref
+        // TODO: Fetch data from sharedPref using factory class!!!
         this.searchText = "";
-        this.status = new MutableLiveData<>();
-        this.status.setValue(false);
+        this.status = false;
     }
 
     public String getSearchText() {
@@ -56,12 +55,13 @@ public class ListViewModel extends ViewModel {
     }
 
     public void setStatus(boolean status) {
-        this.status.setValue(status);
+        SHDebug.debugTag(CLASS_NAME, "setStatus");
+        this.status = status;
         // TODO: I should refresh here list using Transformations.switchMap?
     }
 
     public boolean getStatus() {
-        return status.getValue();
+        return status;
     }
 
     public LiveData<List<CategoryEntity>> getCategories(String source, String searchText) {
@@ -75,10 +75,10 @@ public class ListViewModel extends ViewModel {
         }
         if (this.searchText.isEmpty()) {
             SHDebug.debugTag(CLASS_NAME, "getCategories: all, " + this.searchText);
-            return repository.getCategoriesFromDB(this.status.getValue());
+            return repository.getCategoriesFromDB(this.status);
         } else {
             SHDebug.debugTag(CLASS_NAME, "getCategories: filtered, " + this.searchText);
-            return repository.getFilteredCategoriesFromDB(this.status.getValue(), searchText);
+            return repository.getFilteredCategoriesFromDB(this.status, searchText);
         }
     }
 

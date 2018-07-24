@@ -62,20 +62,6 @@ public class ListFragment extends Fragment implements ListInterface {
 */
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        SHDebug.debugTag(CLASS_NAME, "onCreate");
-/*
-        try {
-            ListViewModelFactory factory = InjectorUtils.provideListActivityViewModelFactory(getActivity().getApplicationContext());
-            listViewModel = ViewModelProviders.of(getActivity(), factory).get(ListViewModel.class);
-        } catch (NullPointerException e) {
-            throw new NullPointerException();
-        }
-*/
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         SHDebug.debugTag(CLASS_NAME, "onCreateView");

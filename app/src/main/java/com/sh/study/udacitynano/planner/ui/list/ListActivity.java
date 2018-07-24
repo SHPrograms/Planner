@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.facebook.stetho.Stetho;
 import com.sh.study.udacitynano.planner.constants.MyConstants;
 import com.sh.study.udacitynano.planner.utils.InjectorUtils;
 import com.sh.study.udacitynano.planner.ui.category.CategoryActivity;
@@ -30,7 +31,7 @@ import butterknife.ButterKnife;
  * @since 2018-07-09
  */
 public class ListActivity extends AppCompatActivity {
-    @BindView(R.id.toolbar)
+    @BindView(R.id.toolbar_list)
     public Toolbar toolbar;
     @BindView(R.id.fab)
     public FloatingActionButton fab;
@@ -41,6 +42,8 @@ public class ListActivity extends AppCompatActivity {
 
     private static final String CLASS_NAME = "ListActivity";
 
+    //TODO: When run detail activity -> orientation change -> back to main = not saved by ViewModel!
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +51,8 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
         ButterKnife.bind(this);
         // TODO: Only for testing
-//        Stetho.initializeWithDefaults(this);
+        Stetho.initializeWithDefaults(this);
+
         setSupportActionBar(toolbar);
 
         fragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
@@ -59,6 +63,7 @@ public class ListActivity extends AppCompatActivity {
         fab.setOnClickListener(view -> {
             SHDebug.debugTag(CLASS_NAME, "fab.setOnClickListener:Start");
             Intent addCategory = new Intent(ListActivity.this, CategoryActivity.class);
+            addCategory.putExtra(MyConstants.INTENT_PARENT_CATEGORY_ID, 0);
             startActivity(addCategory);
         });
         SHDebug.debugTag(CLASS_NAME, "onCreate:End");
@@ -96,7 +101,8 @@ public class ListActivity extends AppCompatActivity {
                 getFilteredCategories(MyConstants.SOURCE_STATUS, "");
                 break;
             case R.id.menu_list_item_action_data:
-                Toast.makeText(this, "data selected", Toast.LENGTH_SHORT).show();
+                // TODO: Implement services
+                Toast.makeText(this, "Create report", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
@@ -106,6 +112,7 @@ public class ListActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        SHDebug.debugTag(CLASS_NAME, "onPrepareOptionsMenu:Start");
         if (viewModel.getStatus()) {
             menu.findItem(R.id.menu_list_item_action_filter).setIcon(ContextCompat.getDrawable(this, android.R.drawable.checkbox_on_background));
         } else {

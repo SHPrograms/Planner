@@ -50,4 +50,8 @@ public class DatabaseRepository {
         if (active) return plannerDatabase.categoryDao().loadActiveCategories();
         else return plannerDatabase.categoryDao().loadAllCategories();
     }
+    public LiveData<CategoryEntity> getCategoryByIdFromDB(int id) {
+        SHDebug.debugTag(CLASS_NAME, "getCategoryByIdFromDB");
+         return plannerDatabase.categoryDao().loadCategoryById(id);
+    }
 }

@@ -5,12 +5,17 @@
     <string name="menu_list_item_action_search">Search</string>
     <string name="menu_list_item_action_filter">Active categories</string>
     <string name="menu_list_item_action_data">Export database</string>
-
-
+    <!--menu_category-->
+    <string name="menu_category_item_action_events">Last events</string>
+    <string name="menu_category_item_action_delete">Delete category</string>
+    <!--fragment_category-->
+    <string name="new_category_name_label">Add category name:</string>
+    <string name="new_category_search_label">Parent category:</string>
 
     <!--TODO: temporary -->
-    <string name="action_settings">Settings</string>
     <string name="widget_title">Active Event in Capstone, Stage 1 - Design, started at 12:47</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="app_name_category">New category</string>
+
 </resources>
