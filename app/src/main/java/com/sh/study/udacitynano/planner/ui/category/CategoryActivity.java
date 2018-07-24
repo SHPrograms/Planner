@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.sh.study.udacitynano.planner.R;
@@ -36,6 +37,8 @@ public class CategoryActivity extends AppCompatActivity {
     public FloatingActionButton fab;
     @BindView(R.id.new_category_search_label)
     public TextView newCategorySearchLabel;
+    @BindView(R.id.new_category_name_et)
+    public EditText newCategoryName;
 
     private CategoryFragment fragment;
 
@@ -69,23 +72,24 @@ public class CategoryActivity extends AppCompatActivity {
             }
         });
 
+/*
         viewModel.getMainCategory().observe(this, new Observer<CategoryEntity>() {
             @Override
             public void onChanged(@Nullable CategoryEntity categoryEntity) {
                 if (categoryEntity == null) {
                     // TODO: Hide delete button and other data related to swiped right category - it is not update
+                    toolbar.getMenu().findItem(R.id.menu_category_item_action_delete).setEnabled(false);
+                    toolbar.getMenu().findItem(R.id.menu_category_item_action_events).setEnabled(false);
                 }
             }
         });
+*/
 
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SHDebug.debugTag(CLASS_NAME, "fab.setOnClickListener:Start");
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+        fab.setOnClickListener(view -> {
+            SHDebug.debugTag(CLASS_NAME, "fab.setOnClickListener:Start");
+            String name = newCategoryName.getText().toString();
+            viewModel.insertCategory(name);
+            finish();
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -94,6 +98,13 @@ public class CategoryActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         SHDebug.debugTag(CLASS_NAME, "onCreateOptionsMenu:Start");
         getMenuInflater().inflate(R.menu.menu_category, menu);
+
+        viewModel.getMainCategory().observe(this, categoryEntity -> {
+            if (categoryEntity == null) {
+                menu.findItem(R.id.menu_category_item_action_delete).setVisible(false);
+                menu.findItem(R.id.menu_category_item_action_events).setVisible(false);
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 

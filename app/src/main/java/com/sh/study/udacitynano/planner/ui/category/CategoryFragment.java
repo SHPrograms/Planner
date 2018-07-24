@@ -1,6 +1,5 @@
 package com.sh.study.udacitynano.planner.ui.category;
 
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;

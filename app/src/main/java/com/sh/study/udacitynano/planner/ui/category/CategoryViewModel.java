@@ -3,6 +3,7 @@ package com.sh.study.udacitynano.planner.ui.category;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
+import com.sh.study.udacitynano.planner.constants.MyConstants;
 import com.sh.study.udacitynano.planner.constants.SHDebug;
 import com.sh.study.udacitynano.planner.database.CategoryEntity;
 import com.sh.study.udacitynano.planner.database.DatabaseRepository;
@@ -29,11 +30,22 @@ public class CategoryViewModel extends ViewModel {
     }
 
     public LiveData<CategoryEntity> getParentCategory() {
+        SHDebug.debugTag(CLASS_NAME, "getParentCategory");
         return parentCategory;
     }
 
     public LiveData<CategoryEntity> getMainCategory() {
+        SHDebug.debugTag(CLASS_NAME, "getMainCategory");
         return mainCategory;
+    }
+
+    public void insertCategory(String name) {
+        SHDebug.debugTag(CLASS_NAME, "insertCategory");
+        if (parentCategory.getValue() != null) {
+            repository.setNewCategoryInDB(name, parentCategory.getValue().getId());
+        } else {
+            repository.setNewCategoryInDB(name, 0);
+        }
     }
 }
 

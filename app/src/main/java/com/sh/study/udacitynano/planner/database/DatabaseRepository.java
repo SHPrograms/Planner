@@ -50,8 +50,15 @@ public class DatabaseRepository {
         if (active) return plannerDatabase.categoryDao().loadActiveCategories();
         else return plannerDatabase.categoryDao().loadAllCategories();
     }
+
     public LiveData<CategoryEntity> getCategoryByIdFromDB(int id) {
         SHDebug.debugTag(CLASS_NAME, "getCategoryByIdFromDB");
          return plannerDatabase.categoryDao().loadCategoryById(id);
+    }
+
+    public void setNewCategoryInDB(String name, int parent) {
+        SHDebug.debugTag(CLASS_NAME, "setNewCategory");
+        final CategoryEntity categoryEntity = new CategoryEntity(name, parent, true);
+        executors.diskIO().execute(() -> plannerDatabase.categoryDao().insertCategory(categoryEntity));
     }
 }

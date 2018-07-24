@@ -3,7 +3,6 @@ package com.sh.study.udacitynano.planner.ui.category;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
-import com.sh.study.udacitynano.planner.database.CategoryEntity;
 import com.sh.study.udacitynano.planner.database.DatabaseRepository;
 
 /**
