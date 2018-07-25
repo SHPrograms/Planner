@@ -39,6 +39,10 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListAdapterViewHolder
         this.notifyDataSetChanged();
     }
 
+    public CategoryEntity getItem(int position) {
+        return dataList.get(position);
+    }
+
     @NonNull
     @Override
     public ListAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

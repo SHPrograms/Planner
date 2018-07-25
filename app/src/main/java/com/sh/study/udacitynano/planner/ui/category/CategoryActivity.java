@@ -1,9 +1,7 @@
 package com.sh.study.udacitynano.planner.ui.category;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +15,6 @@ import android.widget.TextView;
 import com.sh.study.udacitynano.planner.R;
 import com.sh.study.udacitynano.planner.constants.MyConstants;
 import com.sh.study.udacitynano.planner.constants.SHDebug;
-import com.sh.study.udacitynano.planner.database.CategoryEntity;
 import com.sh.study.udacitynano.planner.utils.InjectorUtils;
 
 import butterknife.BindView;
@@ -37,6 +34,8 @@ public class CategoryActivity extends AppCompatActivity {
     public FloatingActionButton fab;
     @BindView(R.id.new_category_search_label)
     public TextView newCategorySearchLabel;
+    @BindView(R.id.new_category_name_label)
+    public TextView newCategoryNameLabel;
     @BindView(R.id.new_category_name_et)
     public EditText newCategoryName;
 
@@ -63,33 +62,22 @@ public class CategoryActivity extends AppCompatActivity {
                 getIntent().getIntExtra(MyConstants.INTENT_MAIN_CATEGORY_ID, 0));
         viewModel = ViewModelProviders.of(this, factory).get(CategoryViewModel.class);
 
-        viewModel.getParentCategory().observe(this, categoryEntity -> {
-            if (categoryEntity == null) {
+        viewModel.getParentCategory().observe(this, parentCategory -> {
+            if (parentCategory == null) {
                 newCategorySearchLabel.setVisibility(View.GONE);
             } else {
                 newCategorySearchLabel.setText(
-                        String.format(getString(R.string.new_category_search_label) + categoryEntity.getName()));
+                        String.format(getString(R.string.new_category_search_label) + parentCategory.getName()));
             }
         });
-
-/*
-        viewModel.getMainCategory().observe(this, new Observer<CategoryEntity>() {
-            @Override
-            public void onChanged(@Nullable CategoryEntity categoryEntity) {
-                if (categoryEntity == null) {
-                    // TODO: Hide delete button and other data related to swiped right category - it is not update
-                    toolbar.getMenu().findItem(R.id.menu_category_item_action_delete).setEnabled(false);
-                    toolbar.getMenu().findItem(R.id.menu_category_item_action_events).setEnabled(false);
-                }
-            }
-        });
-*/
 
         fab.setOnClickListener(view -> {
             SHDebug.debugTag(CLASS_NAME, "fab.setOnClickListener:Start");
-            String name = newCategoryName.getText().toString();
-            viewModel.insertCategory(name);
-            finish();
+            String name = getNewCategoryName();
+            if (!name.isEmpty()) {
+                viewModel.setCategoryToDB(name);
+                finish();
+            }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -99,10 +87,22 @@ public class CategoryActivity extends AppCompatActivity {
         SHDebug.debugTag(CLASS_NAME, "onCreateOptionsMenu:Start");
         getMenuInflater().inflate(R.menu.menu_category, menu);
 
-        viewModel.getMainCategory().observe(this, categoryEntity -> {
-            if (categoryEntity == null) {
+        viewModel.getMainCategory().observe(this, mainCategory -> {
+            if (mainCategory == null) {
                 menu.findItem(R.id.menu_category_item_action_delete).setVisible(false);
                 menu.findItem(R.id.menu_category_item_action_events).setVisible(false);
+            } else {
+                setTitle("Details");
+                if (! mainCategory.getStatus()) {
+                    newCategoryNameLabel.setText(R.string.new_category_name_label_deactivated);
+                    menu.findItem(R.id.menu_category_item_action_delete).setVisible(false);
+                    newCategoryName.setEnabled(false);
+                    fab.hide();
+                }
+                // TODO: put here information about hours on category
+                menu.findItem(R.id.menu_category_item_action_events).setVisible(false);
+
+                newCategoryName.setText(mainCategory.getName());
             }
         });
         return super.onCreateOptionsMenu(menu);
@@ -115,7 +115,22 @@ public class CategoryActivity extends AppCompatActivity {
         if (id == android.R.id.home) {
             onBackPressed();
             return true;
+        } else if (id == R.id.menu_category_item_action_delete) {
+            String name = getNewCategoryName();
+            if (! name.isEmpty()) {
+                viewModel.setAsInactiveStatusCategoryToDB(name);
+                finish();
+            }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private String getNewCategoryName() {
+        String name = newCategoryName.getText().toString().trim();
+        if (name.isEmpty()) {
+            Snackbar.make(getCurrentFocus(), getString(R.string.category_name_cant_be_empty), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
+        return name;
     }
 }

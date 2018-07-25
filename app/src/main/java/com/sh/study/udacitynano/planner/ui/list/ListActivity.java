@@ -42,7 +42,27 @@ public class ListActivity extends AppCompatActivity {
 
     private static final String CLASS_NAME = "ListActivity";
 
-    //TODO: When run detail activity -> orientation change -> back to main = not saved by ViewModel!
+    /*
+        TODO list:
+
+        TODO: New Category swipe left with parent:
+        - parent caption visible
+        - add parentId to DB
+        TODO: Category details: swipe right:
+        - trash visible
+        - add new caption with information how much time is in events
+        - trash change status
+        - I can change name
+        - fab save - update condition
+        TODO: Create event: click on element in recyclerView:
+        - SnackBar with information
+        - check if another event is running - stop it and remove clock icon
+        - Add clock icon on element
+        - Update widget
+        - Only start, stop and time in event table for now
+        TODO: Save data using services
+        TODO: When run detail activity -> orientation change -> back to main = not saved by ViewModel!
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +84,7 @@ public class ListActivity extends AppCompatActivity {
             SHDebug.debugTag(CLASS_NAME, "fab.setOnClickListener:Start");
             Intent addCategory = new Intent(ListActivity.this, CategoryActivity.class);
             addCategory.putExtra(MyConstants.INTENT_PARENT_CATEGORY_ID, 0);
+            addCategory.putExtra(MyConstants.INTENT_MAIN_CATEGORY_ID, 0);
             startActivity(addCategory);
         });
         SHDebug.debugTag(CLASS_NAME, "onCreate:End");
@@ -123,6 +144,7 @@ public class ListActivity extends AppCompatActivity {
 
     private void getFilteredCategories(String source, String searchText) {
         viewModel.getCategories(source, searchText).observe(ListActivity.this, categoryEntities -> {
+
             fragment.listAdapter.setDataList(categoryEntities);
         });
 

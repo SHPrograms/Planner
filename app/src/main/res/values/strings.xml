@@ -17,5 +17,7 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="app_name_category">New category</string>
+    <string name="category_name_cant_be_empty">Category name cannot be empty</string>
+    <string name="new_category_name_label_deactivated">Category name:</string>
 
 </resources>

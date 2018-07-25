@@ -56,9 +56,13 @@ public class DatabaseRepository {
          return plannerDatabase.categoryDao().loadCategoryById(id);
     }
 
-    public void setNewCategoryInDB(String name, int parent) {
-        SHDebug.debugTag(CLASS_NAME, "setNewCategory");
-        final CategoryEntity categoryEntity = new CategoryEntity(name, parent, true);
-        executors.diskIO().execute(() -> plannerDatabase.categoryDao().insertCategory(categoryEntity));
+    public void setInsertCategoryInDB(CategoryEntity insertCategory) {
+        SHDebug.debugTag(CLASS_NAME, "setInsertCategoryInDB");
+        executors.diskIO().execute(() -> plannerDatabase.categoryDao().insertCategory(insertCategory));
+    }
+
+    public void setUpdateCategoryInDB(CategoryEntity updateCategory) {
+        SHDebug.debugTag(CLASS_NAME, "setUpdateCategoryInDB");
+        executors.diskIO().execute(() -> plannerDatabase.categoryDao().updateCategory(updateCategory));
     }
 }

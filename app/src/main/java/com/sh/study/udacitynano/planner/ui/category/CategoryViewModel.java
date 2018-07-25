@@ -3,7 +3,6 @@ package com.sh.study.udacitynano.planner.ui.category;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.sh.study.udacitynano.planner.constants.MyConstants;
 import com.sh.study.udacitynano.planner.constants.SHDebug;
 import com.sh.study.udacitynano.planner.database.CategoryEntity;
 import com.sh.study.udacitynano.planner.database.DatabaseRepository;
@@ -39,12 +38,32 @@ public class CategoryViewModel extends ViewModel {
         return mainCategory;
     }
 
-    public void insertCategory(String name) {
-        SHDebug.debugTag(CLASS_NAME, "insertCategory");
-        if (parentCategory.getValue() != null) {
-            repository.setNewCategoryInDB(name, parentCategory.getValue().getId());
-        } else {
-            repository.setNewCategoryInDB(name, 0);
+    public void setCategoryToDB(String name) {
+        SHDebug.debugTag(CLASS_NAME, "setCategoryToDB");
+
+        if (mainCategory.getValue() != null) {
+            // Update method
+            int id = mainCategory.getValue().getId();
+            boolean status = mainCategory.getValue().getStatus();
+            int parent = mainCategory.getValue().getParentId();
+
+            final CategoryEntity categoryEntity = new CategoryEntity(id, name, parent, status);
+            repository.setUpdateCategoryInDB(categoryEntity);
+        } else if (parentCategory.getValue() != null) {
+            // Insert method
+            int parent = parentCategory.getValue().getId();
+            final CategoryEntity categoryEntity = new CategoryEntity(name, parent, true);
+            repository.setInsertCategoryInDB(categoryEntity);
+        }
+    }
+
+    public void setAsInactiveStatusCategoryToDB(String name) {
+        SHDebug.debugTag(CLASS_NAME, "setAsInactiveStatusCategoryToDB");
+        if (mainCategory.getValue() != null) {
+            CategoryEntity categoryEntity = mainCategory.getValue();
+            categoryEntity.setName(name);
+            categoryEntity.setStatus(false);
+            repository.setUpdateCategoryInDB(categoryEntity);
         }
     }
 }

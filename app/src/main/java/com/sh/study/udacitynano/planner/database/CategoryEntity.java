@@ -63,7 +63,7 @@ public class CategoryEntity {
         this.parentId = parentId;
     }
 
-    public boolean isStatus() {
+    public boolean getStatus() {
         return status;
     }
 

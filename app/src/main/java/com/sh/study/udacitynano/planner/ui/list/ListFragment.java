@@ -1,23 +1,31 @@
 package com.sh.study.udacitynano.planner.ui.list;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
+import android.graphics.Canvas;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.sh.study.udacitynano.planner.R;
+import com.sh.study.udacitynano.planner.constants.MyConstants;
 import com.sh.study.udacitynano.planner.constants.SHDebug;
+import com.sh.study.udacitynano.planner.ui.category.CategoryActivity;
 import com.sh.study.udacitynano.planner.utils.InjectorUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_SWIPE;
 
 /**
  * Main list Fragment
@@ -71,6 +79,40 @@ public class ListFragment extends Fragment implements ListInterface {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         listAdapter = new ListAdapter(this);
         recyclerView.setAdapter(listAdapter);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                SHDebug.debugTag(CLASS_NAME, "onMove");
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                Intent category = new Intent(getActivity(), CategoryActivity.class);
+                int position = viewHolder.getAdapterPosition();
+
+                if (direction == ItemTouchHelper.LEFT) {
+                    SHDebug.debugTag(CLASS_NAME, "onSwiped:Left");
+                    // Send actual category as parent of new one
+                    int parent = listAdapter.getItem(position).getId();
+                    category.putExtra(MyConstants.INTENT_PARENT_CATEGORY_ID, parent);
+                    // Create new category
+                    category.putExtra(MyConstants.INTENT_MAIN_CATEGORY_ID, 0);
+                    SHDebug.debugTag(CLASS_NAME, "onSwiped:Left, pos: " + position + " , parent: " + parent);
+                } else {
+                    // Send actual information about existing category
+                    int id = listAdapter.getItem(position).getId();
+                    category.putExtra(MyConstants.INTENT_MAIN_CATEGORY_ID, id);
+                    int parent = listAdapter.getItem(position).getParentId();
+                    category.putExtra(MyConstants.INTENT_PARENT_CATEGORY_ID, parent);
+                    SHDebug.debugTag(CLASS_NAME, "onSwiped:Right, pos: " + position + " , parent: " + parent + " category id=" + id);
+                }
+                listAdapter.notifyItemChanged(position);
+                startActivity(category);
+            }
+        }).attachToRecyclerView(recyclerView);
 
         return view;
     }
