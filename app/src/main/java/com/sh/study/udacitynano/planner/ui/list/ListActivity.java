@@ -4,16 +4,19 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 import com.sh.study.udacitynano.planner.constants.MyConstants;
+import com.sh.study.udacitynano.planner.database.CategoryEntity;
 import com.sh.study.udacitynano.planner.utils.InjectorUtils;
 import com.sh.study.udacitynano.planner.ui.category.CategoryActivity;
 import com.sh.study.udacitynano.planner.R;
@@ -30,7 +33,7 @@ import butterknife.ButterKnife;
  * @version 1.0
  * @since 2018-07-09
  */
-public class ListActivity extends AppCompatActivity {
+public class ListActivity extends AppCompatActivity implements ListInterface {
     @BindView(R.id.toolbar_list)
     public Toolbar toolbar;
     @BindView(R.id.fab)
@@ -40,26 +43,15 @@ public class ListActivity extends AppCompatActivity {
     private ListViewModel viewModel;
     private ListFragment fragment;
 
+    private View runningEvent;
+
     private static final String CLASS_NAME = "ListActivity";
 
     /*
         TODO list:
-
-        TODO: New Category swipe left with parent:
-        - parent caption visible
-        - add parentId to DB
         TODO: Category details: swipe right:
-        - trash visible
         - add new caption with information how much time is in events
-        - trash change status
-        - I can change name
-        - fab save - update condition
-        TODO: Create event: click on element in recyclerView:
-        - SnackBar with information
-        - check if another event is running - stop it and remove clock icon
-        - Add clock icon on element
-        - Update widget
-        - Only start, stop and time in event table for now
+        TODO: Widget
         TODO: Save data using services
         TODO: When run detail activity -> orientation change -> back to main = not saved by ViewModel!
     */
@@ -76,6 +68,7 @@ public class ListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         fragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+        fragment.listAdapter.setClickHandler(this::onCategoryClick);
 
         ListViewModelFactory factory = InjectorUtils.provideListActivityViewModelFactory(this.getApplicationContext());
         viewModel = ViewModelProviders.of(this, factory).get(ListViewModel.class);
@@ -174,4 +167,38 @@ public class ListActivity extends AppCompatActivity {
             return true;
         }
     };
+
+    @Override
+    public void onCategoryClick(CategoryEntity category, View view) {
+        Snackbar.make(getCurrentFocus(), "Event is started", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+        /*
+            check if another event is running
+                yes: close previous and open this*
+                no: open this*
+
+            open this event:
+                - keep information in ViewModel or here to change color back
+                - send broadcast for widget
+                - save event into database with only start date
+                - create a new color resource for background
+
+            close previous event:
+                - if another category is clicked previous must be closed
+                - find view and change color
+                - save end date and time as long
+
+            close this event:
+                - view is known - no problem to finish
+                - save end date and time as long
+                - send broadcast for widget
+
+            refresh color when activity is created after orientation changes
+
+        */
+
+        view.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+
+
+    }
 }

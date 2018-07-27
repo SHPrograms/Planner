@@ -1,6 +1,7 @@
 package com.sh.study.udacitynano.planner.ui.list;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import com.sh.study.udacitynano.planner.R;
 import com.sh.study.udacitynano.planner.constants.MyConstants;
 import com.sh.study.udacitynano.planner.constants.SHDebug;
+import com.sh.study.udacitynano.planner.database.CategoryEntity;
 import com.sh.study.udacitynano.planner.ui.category.CategoryActivity;
 import com.sh.study.udacitynano.planner.utils.InjectorUtils;
 
@@ -34,19 +36,22 @@ import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_SWIP
  * @version 1.0
  * @since 2018-07-09
  */
-public class ListFragment extends Fragment implements ListInterface {
+public class ListFragment extends Fragment {
     @BindView(R.id.search_results_list)
     RecyclerView recyclerView;
 
     private static final String CLASS_NAME = "ListFragment";
     private Unbinder unbinder;
     public ListAdapter listAdapter;
+/*
     private ListInterface listClickListener;
     private ListViewModel listViewModel;
+*/
 
     public ListFragment() {
         SHDebug.debugTag(CLASS_NAME, "constructor");
     }
+
 
 /*
     @Override
@@ -77,7 +82,8 @@ public class ListFragment extends Fragment implements ListInterface {
         unbinder = ButterKnife.bind(this, view);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        listAdapter = new ListAdapter(this);
+        // listAdapter = new ListAdapter(this);
+        listAdapter = new ListAdapter();
         recyclerView.setAdapter(listAdapter);
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {

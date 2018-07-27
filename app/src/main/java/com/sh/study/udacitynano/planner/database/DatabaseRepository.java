@@ -20,7 +20,7 @@ public class DatabaseRepository {
 
     private static DatabaseRepository sInstance;
     private static PlannerDatabase plannerDatabase;
-    private static AppExecutors executors; // TODO: Do I need that?
+    private static AppExecutors executors;
 
     private DatabaseRepository(PlannerDatabase plannerDatabase, AppExecutors executors) {
         SHDebug.debugTag(CLASS_NAME, "constructor");

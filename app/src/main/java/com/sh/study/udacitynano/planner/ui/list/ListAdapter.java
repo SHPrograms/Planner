@@ -25,12 +25,22 @@ import butterknife.ButterKnife;
  */
 class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListAdapterViewHolder> {
     private static final String CLASS_NAME = "ListAdapter";
-    private final ListInterface clickHandler;
+    private ListInterface clickHandler;
     private List<CategoryEntity> dataList;
 
+/*
     ListAdapter(ListInterface clickHandler) {
         SHDebug.debugTag(CLASS_NAME, "constructor");
         this.clickHandler = clickHandler;
+    }
+*/
+
+    ListAdapter() {
+        SHDebug.debugTag(CLASS_NAME, "constructor");
+    }
+
+    public void setClickHandler(ListInterface listInterface) {
+        clickHandler = listInterface;
     }
 
     public void setDataList(List<CategoryEntity> dataList) {
@@ -65,13 +75,19 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListAdapterViewHolder
         else return dataList.size();
     }
 
-    public class ListAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class ListAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.tv_category_name)
         TextView itemName;
 
         ListAdapterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this::onClick);
+        }
+
+        @Override
+        public void onClick(View v) {
+            clickHandler.onCategoryClick(dataList.get(getAdapterPosition()), v);
         }
     }
 }

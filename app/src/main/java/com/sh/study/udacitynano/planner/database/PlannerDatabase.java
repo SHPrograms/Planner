@@ -40,7 +40,7 @@ public abstract class PlannerDatabase extends RoomDatabase {
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         PlannerDatabase.class, PlannerDatabase.DATABASE_NAME)
                         .fallbackToDestructiveMigration()
-                        .addCallback(callback) // TODO: temporary!
+//                        .addCallback(callback) // TODO: temporary!
                         .build();
             }
         }
@@ -52,6 +52,7 @@ public abstract class PlannerDatabase extends RoomDatabase {
     public abstract CategoryDao categoryDao();
 
     // TODO: Temporary!
+/*
     private static RoomDatabase.Callback callback = new RoomDatabase.Callback() {
         public void onCreate(SupportSQLiteDatabase db) {
 
@@ -83,4 +84,5 @@ public abstract class PlannerDatabase extends RoomDatabase {
             db.insert("category", OnConflictStrategy.IGNORE, contentValues);
         }
     };
+*/
 }
