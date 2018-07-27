@@ -28,9 +28,18 @@ public interface EventDao {
     @Delete
     void deleteEvent(EventEntity EventEntity);
 
+    /**
+     * There is no option for multi running events so previous must be closed before run next one
+     * @return single running Event
+     */
+    @Query("SELECT * FROM event WHERE time = 0 LIMIT 1")
+    LiveData<EventEntity> loadRunningEvent();
+
+/*
     @Query("SELECT * FROM event ORDER BY id")
     LiveData<List<EventEntity>> loadAllEvents();
 
     @Query("SELECT * FROM event WHERE category_id = :id ORDER BY id")
     LiveData<EventEntity> loadEventsByCategoryId(int id);
+*/
 }

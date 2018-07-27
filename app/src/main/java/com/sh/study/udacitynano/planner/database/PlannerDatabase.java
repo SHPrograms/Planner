@@ -23,7 +23,7 @@ import com.sh.study.udacitynano.planner.constants.SHDebug;
  * @version 1.0
  * @since 2018-07-13
  */
-@Database(entities = {EventEntity.class, CategoryEntity.class}, version = 3, exportSchema = false)
+@Database(entities = {EventEntity.class, CategoryEntity.class}, version = 1, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract class PlannerDatabase extends RoomDatabase {
     private static final String CLASS_NAME = "PlannerDatabase";
@@ -40,7 +40,7 @@ public abstract class PlannerDatabase extends RoomDatabase {
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         PlannerDatabase.class, PlannerDatabase.DATABASE_NAME)
                         .fallbackToDestructiveMigration()
-//                        .addCallback(callback) // TODO: temporary!
+                        .addCallback(callback) // TODO: temporary!
                         .build();
             }
         }
@@ -52,7 +52,7 @@ public abstract class PlannerDatabase extends RoomDatabase {
     public abstract CategoryDao categoryDao();
 
     // TODO: Temporary!
-/*
+
     private static RoomDatabase.Callback callback = new RoomDatabase.Callback() {
         public void onCreate(SupportSQLiteDatabase db) {
 
@@ -60,6 +60,7 @@ public abstract class PlannerDatabase extends RoomDatabase {
 
         public void onOpen(SupportSQLiteDatabase db) {
             db.execSQL("Delete From category");
+            db.execSQL("Delete From event");
 
             ContentValues contentValues = new ContentValues();
 
@@ -84,5 +85,4 @@ public abstract class PlannerDatabase extends RoomDatabase {
             db.insert("category", OnConflictStrategy.IGNORE, contentValues);
         }
     };
-*/
 }

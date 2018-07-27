@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
@@ -25,7 +26,6 @@ import com.sh.study.udacitynano.planner.constants.SHDebug;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-
 /**
  * Main list activity.
  *
@@ -38,6 +38,8 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
     public Toolbar toolbar;
     @BindView(R.id.fab)
     public FloatingActionButton fab;
+    @BindView(R.id.stop_event_button)
+    Button stopEventButton;
 
     private SearchView searchView;
     private ListViewModel viewModel;
@@ -53,7 +55,6 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
         - add new caption with information how much time is in events
         TODO: Widget
         TODO: Save data using services
-        TODO: When run detail activity -> orientation change -> back to main = not saved by ViewModel!
     */
 
     @Override
@@ -68,10 +69,16 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
         setSupportActionBar(toolbar);
 
         fragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
-        fragment.listAdapter.setClickHandler(this::onCategoryClick);
+        fragment.listAdapter.setClickHandler(this);
 
-        ListViewModelFactory factory = InjectorUtils.provideListActivityViewModelFactory(this.getApplicationContext());
+        ListViewModelFactory factory = InjectorUtils.provideListActivityViewModelFactory(
+                this.getApplicationContext(),
+                ListPreferences.getSourceStatusPreferences(this),
+                ListPreferences.getSearchTextPreferences(this));
+
         viewModel = ViewModelProviders.of(this, factory).get(ListViewModel.class);
+
+        getActiveEvent();
 
         fab.setOnClickListener(view -> {
             SHDebug.debugTag(CLASS_NAME, "fab.setOnClickListener:Start");
@@ -80,6 +87,9 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
             addCategory.putExtra(MyConstants.INTENT_MAIN_CATEGORY_ID, 0);
             startActivity(addCategory);
         });
+
+        stopEventButton.setOnClickListener(v -> viewModel.setEventToDB(null));
+
         SHDebug.debugTag(CLASS_NAME, "onCreate:End");
     }
 
@@ -136,19 +146,27 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
     }
 
     private void getFilteredCategories(String source, String searchText) {
+        SHDebug.debugTag(CLASS_NAME, "getFilteredCategories:Start");
         viewModel.getCategories(source, searchText).observe(ListActivity.this, categoryEntities -> {
-
+            SHDebug.debugTag(CLASS_NAME, "getFilteredCategories, size: " + categoryEntities.size());
             fragment.listAdapter.setDataList(categoryEntities);
         });
-
-        //TODO: V2
-/*
-        viewModel.getData(ListPreferences.getListStatusPreferences(this), searchText).observe(ListActivity.this, categoryEntities -> {
-            fragment.listAdapter.setDataList(categoryEntities);
-        });
-*/
     }
 
+    private void getActiveEvent() {
+        SHDebug.debugTag(CLASS_NAME, "getActiveEvent:Start");
+        viewModel.getActiveEvent().observe(ListActivity.this, activeEvent -> {
+            SHDebug.debugTag(CLASS_NAME, "getActiveEvent:observe");
+            if (activeEvent != null) {
+                SHDebug.debugTag(CLASS_NAME, "getActiveEvent:observe, event: " + activeEvent.getId());
+                fragment.recyclerView.setVisibility(View.INVISIBLE);
+                stopEventButton.setVisibility(View.VISIBLE);
+            } else {
+                fragment.recyclerView.setVisibility(View.VISIBLE);
+                stopEventButton.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
     /**
      * SearchView Listener. Fetching data into RecyclerView in Fragment {R.id.fragment}
      */
@@ -172,33 +190,16 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
     public void onCategoryClick(CategoryEntity category, View view) {
         Snackbar.make(getCurrentFocus(), "Event is started", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
+        viewModel.setEventToDB(category);
         /*
-            check if another event is running
-                yes: close previous and open this*
-                no: open this*
-
-            open this event:
-                - keep information in ViewModel or here to change color back
-                - send broadcast for widget
-                - save event into database with only start date
-                - create a new color resource for background
-
-            close previous event:
-                - if another category is clicked previous must be closed
-                - find view and change color
-                - save end date and time as long
-
-            close this event:
-                - view is known - no problem to finish
-                - save end date and time as long
-                - send broadcast for widget
-
-            refresh color when activity is created after orientation changes
-
+            TODO: send broadcast for widget when event is started and finished
         */
+    }
 
-        view.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-
-
+    @Override
+    protected void onPause() {
+        ListPreferences.setSearchTextPreferences(this, viewModel.getSearchText());
+        ListPreferences.setSourceStatusPreferences(this, viewModel.getStatus());
+        super.onPause();
     }
 }

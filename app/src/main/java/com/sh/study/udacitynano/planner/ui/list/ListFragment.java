@@ -1,33 +1,23 @@
 package com.sh.study.udacitynano.planner.ui.list;
 
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.sh.study.udacitynano.planner.R;
 import com.sh.study.udacitynano.planner.constants.MyConstants;
 import com.sh.study.udacitynano.planner.constants.SHDebug;
-import com.sh.study.udacitynano.planner.database.CategoryEntity;
 import com.sh.study.udacitynano.planner.ui.category.CategoryActivity;
-import com.sh.study.udacitynano.planner.utils.InjectorUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_SWIPE;
 
 /**
  * Main list Fragment
@@ -43,36 +33,10 @@ public class ListFragment extends Fragment {
     private static final String CLASS_NAME = "ListFragment";
     private Unbinder unbinder;
     public ListAdapter listAdapter;
-/*
-    private ListInterface listClickListener;
-    private ListViewModel listViewModel;
-*/
 
     public ListFragment() {
         SHDebug.debugTag(CLASS_NAME, "constructor");
     }
-
-
-/*
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        SHDebug.debugTag(CLASS_NAME, "onAttach");
-        if (context instanceof ListInterface) {
-            listClickListener = (ListInterface) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement ListInterface");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        SHDebug.debugTag(CLASS_NAME, "onDetach");
-        listClickListener = null;
-    }
-*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,9 +46,9 @@ public class ListFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        // listAdapter = new ListAdapter(this);
         listAdapter = new ListAdapter();
         recyclerView.setAdapter(listAdapter);
+
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 

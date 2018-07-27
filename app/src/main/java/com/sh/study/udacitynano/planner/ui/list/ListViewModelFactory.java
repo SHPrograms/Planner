@@ -5,8 +5,6 @@ import android.arch.lifecycle.ViewModelProvider;
 
 import com.sh.study.udacitynano.planner.database.DatabaseRepository;
 
-import java.util.List;
-
 /**
  * Factory for List ViewModel
  *
@@ -17,13 +15,17 @@ import java.util.List;
 public class ListViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
     private final DatabaseRepository repository;
+    private final boolean status;
+    private final String searchText;
 
-    public ListViewModelFactory(DatabaseRepository repository) {
+    public ListViewModelFactory(DatabaseRepository repository, boolean status, String searchText) {
         this.repository = repository;
+        this.status = status;
+        this.searchText = searchText;
     }
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        return (T) new ListViewModel(repository);
+        return (T) new ListViewModel(repository, status, searchText);
     }
 }

@@ -28,26 +28,22 @@ public class EventEntity {
 
     private long time;
 
-    private String description;
-
     @ColumnInfo(name = "category_id")
     private int categoryId;
 
     @Ignore
-    public EventEntity(Date dateStart, Date dateEnd, long time, String description, int categoryId) {
+    public EventEntity(Date dateStart, Date dateEnd, long time, int categoryId) {
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.time = time;
-        this.description = description;
         this.categoryId = categoryId;
     }
 
-    public EventEntity(int id, Date dateStart, Date dateEnd, long time, String description, int categoryId) {
+    public EventEntity(int id, Date dateStart, Date dateEnd, long time, int categoryId) {
         this.id = id;
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.time = time;
-        this.description = description;
         this.categoryId = categoryId;
     }
 
@@ -81,14 +77,6 @@ public class EventEntity {
 
     public void setTime(long time) {
         this.time = time;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public int getCategoryId() {
