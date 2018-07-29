@@ -41,20 +41,16 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
     @BindView(R.id.stop_event_button)
     Button stopEventButton;
 
-    private SearchView searchView;
+    private static final String CLASS_NAME = "ListActivity";
+
 
     private ListViewModel viewModel;
     private ListFragment fragment;
-
-    private View runningEvent;
-
-    private static final String CLASS_NAME = "ListActivity";
 
 
     /*
         TODO: List:
         - save status of active event into sharedPref
-        - check lifecycle because Button is not visible when app is hidden - onRestart or onSaveInstance
         - how to block buttons when they shouldn't be active in menu?
         TODO: New .gitignoge list based on https://github.com/lineargs/WatchNextApp to prepare for services
         TODO: Save data using services:
@@ -82,16 +78,9 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
         fragment.listAdapter.setClickHandler(this);
 
         ListViewModelFactory factory = InjectorUtils.provideListActivityViewModelFactory(
-                this.getApplicationContext(),
-                ListPreferences.getSourceStatusPreferences(this),
-                ListPreferences.getSearchTextPreferences(this));
-
+                this.getApplicationContext());
         viewModel = ViewModelProviders.of(this, factory).get(ListViewModel.class);
 
-        // TODO: Move from factory these data and run them here plus add check about active event because
-        ListPreferences.getSourceStatusPreferences(this);
-        ListPreferences.getSearchTextPreferences(this);
-        // TODO: this is not working after orientation change. Why?
         getActiveEvent();
 
         fab.setOnClickListener(view -> {
@@ -105,7 +94,6 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
         stopEventButton.setOnClickListener((View v) -> {
             viewModel.setEventToDB(null);
             ListPreferences.setWidgetDataPreferences(getApplication(),this, "");
-//            viewModel.setButtonIsVisible(false);
         });
 
         SHDebug.debugTag(CLASS_NAME, "onCreate:End");
@@ -116,7 +104,9 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
         SHDebug.debugTag(CLASS_NAME, "onCreateOptionsMenu:Start");
         getMenuInflater().inflate(R.menu.menu_list, menu);
 
-        searchView = (SearchView) menu.findItem(R.id.menu_list_item_action_search).getActionView();
+        viewModel.setStatus(ListPreferences.getSourceStatusPreferences(this));
+
+        SearchView searchView = (SearchView) menu.findItem(R.id.menu_list_item_action_search).getActionView();
         searchView.setOnQueryTextListener(onQueryTextListener);
         searchView.setQuery(viewModel.getSearchText(), true);
 
@@ -142,7 +132,6 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
                     item.setIcon(ContextCompat.getDrawable(this, android.R.drawable.checkbox_on_background));
                     Toast.makeText(this, "Only active categories", Toast.LENGTH_SHORT).show();
                 }
-                // TODO: Temporary:
                 getFilteredCategories(MyConstants.SOURCE_STATUS, "");
                 break;
             case R.id.menu_list_item_action_data:
@@ -184,13 +173,10 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
                 fragment.recyclerView.setVisibility(View.INVISIBLE);
                 fab.setVisibility(View.INVISIBLE);
                 stopEventButton.setVisibility(View.VISIBLE);
-                viewModel.setButtonIsVisible(false);
-
             } else {
                 fragment.recyclerView.setVisibility(View.VISIBLE);
                 fab.setVisibility(View.VISIBLE);
                 stopEventButton.setVisibility(View.INVISIBLE);
-                viewModel.setButtonIsVisible(true);
             }
         });
     }
@@ -217,14 +203,14 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
     @Override
     public void onCategoryClick(CategoryEntity category, View view) {
         viewModel.setEventToDB(category);
-//        viewModel.setButtonIsVisible(true);
         ListPreferences.setWidgetDataPreferences(getApplication(),this, category.getName());
     }
 
+
     @Override
     protected void onPause() {
-        ListPreferences.setSearchTextPreferences(this, viewModel.getSearchText());
-        ListPreferences.setSourceStatusPreferences(this, viewModel.getStatus());
         super.onPause();
+        SHDebug.debugTag(CLASS_NAME, "onSaveInstanceState:start");
+        ListPreferences.setSourceStatusPreferences(this, viewModel.getStatus());
     }
 }

@@ -27,10 +27,10 @@ public class InjectorUtils {
         return DatabaseRepository.getInstance(database, executors);
     }
 
-    public static ListViewModelFactory provideListActivityViewModelFactory(Context context, boolean status, String searchText) {
+    public static ListViewModelFactory provideListActivityViewModelFactory(Context context) {
         SHDebug.debugTag(CLASS_NAME, "provideListActivityViewModelFactory");
         DatabaseRepository repository = provideRepository(context.getApplicationContext());
-        return new ListViewModelFactory(repository, status, searchText);
+        return new ListViewModelFactory(repository);
     }
 
     public static CategoryViewModelFactory provideCategoryActivityViewModelFactory(

@@ -15,17 +15,13 @@ import com.sh.study.udacitynano.planner.database.DatabaseRepository;
 public class ListViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
     private final DatabaseRepository repository;
-    private final boolean status;
-    private final String searchText;
 
-    public ListViewModelFactory(DatabaseRepository repository, boolean status, String searchText) {
+    public ListViewModelFactory(DatabaseRepository repository) {
         this.repository = repository;
-        this.status = status;
-        this.searchText = searchText;
     }
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        return (T) new ListViewModel(repository, status, searchText);
+        return (T) new ListViewModel(repository);
     }
 }

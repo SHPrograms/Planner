@@ -25,17 +25,14 @@ public class ListViewModel extends ViewModel {
     private final DatabaseRepository repository;
 
     private LiveData<EventEntity> activeEvent;
-    private boolean buttonIsVisible;
 
-    private String searchText;
     private boolean status;
+    private String searchText;
 
-    ListViewModel(DatabaseRepository repository, boolean status, String searchText) {
+
+    ListViewModel(DatabaseRepository repository) {
         SHDebug.debugTag(CLASS_NAME, "constructor");
         this.repository = repository;
-        this.searchText = searchText;
-        this.status = status;
-//        activeEvent = repository.getActiveEvent();
     }
 
     public LiveData<EventEntity> getActiveEvent() {
@@ -67,10 +64,10 @@ public class ListViewModel extends ViewModel {
         }
         if (this.searchText.isEmpty()) {
             SHDebug.debugTag(CLASS_NAME, "getCategories: all, " + this.searchText);
-            return repository.getCategoriesFromDB(this.status);
+            return repository.getCategoriesFromDB(status);
         } else {
             SHDebug.debugTag(CLASS_NAME, "getCategories: filtered, " + this.searchText);
-            return repository.getFilteredCategoriesFromDB(this.status, searchText);
+            return repository.getFilteredCategoriesFromDB(status, searchText);
         }
     }
 
@@ -89,13 +86,5 @@ public class ListViewModel extends ViewModel {
         } else {
             throw new UnsupportedOperationException("Not implemented yet.");
         }
-    }
-
-    public boolean isButtonIsVisible() {
-        return buttonIsVisible;
-    }
-
-    public void setButtonIsVisible(boolean buttonIsVisible) {
-        this.buttonIsVisible = buttonIsVisible;
     }
 }

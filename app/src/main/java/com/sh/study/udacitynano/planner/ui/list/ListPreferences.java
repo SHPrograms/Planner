@@ -19,7 +19,7 @@ import com.sh.study.udacitynano.planner.widget.PlannerWidget;
 public final class ListPreferences {
 
     private static final String SOURCE_STATUS_FREF = "status";
-    private static final String SOURCE_QUERY_FREF = "query";
+//    private static final String SOURCE_QUERY_FREF = "query";
     private static final String WIDGET_FREF = "widget";
 
     private ListPreferences() {
@@ -43,26 +43,6 @@ public final class ListPreferences {
     public static void setSourceStatusPreferences(Context context, boolean status) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit().putBoolean(SOURCE_STATUS_FREF, status)
-                .apply();
-    }
-
-    /**
-     * Category Search Text filter
-     * @param context
-     * @return String
-     */
-    public static String getSearchTextPreferences(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(SOURCE_QUERY_FREF, "");
-    }
-
-    /**
-     * Category Search Text filter
-     * @param context
-     * @param searchText
-     */
-    public static void setSearchTextPreferences(Context context, String searchText) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit().putString(SOURCE_QUERY_FREF, searchText)
                 .apply();
     }
 
