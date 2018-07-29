@@ -8,8 +8,6 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import java.util.List;
-
 /**
  * Event interface
  *
@@ -37,12 +35,4 @@ public interface EventDao {
 
     @Query("SELECT SUM(time) FROM event WHERE category_id = :id")
     LiveData<Long> loadEventsTimeForCategory(int id);
-
-/*
-    @Query("SELECT * FROM event ORDER BY id")
-    LiveData<List<EventEntity>> loadAllEvents();
-
-    @Query("SELECT * FROM event WHERE category_id = :id ORDER BY id")
-    LiveData<EventEntity> loadEventsByCategoryId(int id);
-*/
 }

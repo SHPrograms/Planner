@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.sh.study.udacitynano.planner.R;
 import com.sh.study.udacitynano.planner.constants.MyConstants;
 import com.sh.study.udacitynano.planner.constants.SHDebug;
@@ -42,10 +44,12 @@ public class CategoryActivity extends AppCompatActivity {
     public EditText newCategoryName;
     @BindView(R.id.new_category_time_label)
     public TextView newCategoryTimeLabel;
+    @BindView(R.id.adView)
+    public AdView adView;
+
 
     private static final String CLASS_NAME = "CategoryActivity";
     private CategoryViewModel viewModel;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +98,10 @@ public class CategoryActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -114,9 +122,7 @@ public class CategoryActivity extends AppCompatActivity {
                     newCategoryName.setEnabled(false);
                     fab.hide();
                 }
-                // TODO: put here information about hours on category
                 menu.findItem(R.id.menu_category_item_action_events).setVisible(false);
-
                 newCategoryName.setText(mainCategory.getName());
             }
         });

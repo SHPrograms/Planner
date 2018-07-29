@@ -22,4 +22,6 @@
     <!--Widget-->
     <string name="widget_title">There is active event for: %1$s category</string>
     <string name="widget_title_empty">No active events</string>
+    <!--Ads-->
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

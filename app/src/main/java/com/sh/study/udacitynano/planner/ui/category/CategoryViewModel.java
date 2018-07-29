@@ -36,9 +36,6 @@ public class CategoryViewModel extends ViewModel {
                 return repository.getTimeForCategoryFromDb(mainCategory.getValue().getId());
             }
         });
-
-
-
     }
 
     public LiveData<CategoryEntity> getParentCategory() {

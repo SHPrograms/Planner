@@ -77,14 +77,4 @@ public interface CategoryDao {
      */
     @Query("SELECT * FROM category WHERE id = :id")
     LiveData<CategoryEntity> loadCategoryById(int id);
-
-    /**
-     * We can't delete category when there exist subcategory
-     * @param id Id of category to check if is not as parent
-     * @return First existing record
-     */
-    @Query("SELECT * FROM category WHERE parent_id = :id LIMIT 1")
-    LiveData<CategoryEntity> isCategoryAsParent(int id);
-
-
 }

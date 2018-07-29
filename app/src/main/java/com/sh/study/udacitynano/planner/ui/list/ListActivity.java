@@ -3,6 +3,7 @@ package com.sh.study.udacitynano.planner.ui.list;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
 import com.sh.study.udacitynano.planner.constants.MyConstants;
 import com.sh.study.udacitynano.planner.database.CategoryEntity;
@@ -21,6 +23,13 @@ import com.sh.study.udacitynano.planner.utils.InjectorUtils;
 import com.sh.study.udacitynano.planner.ui.category.CategoryActivity;
 import com.sh.study.udacitynano.planner.R;
 import com.sh.study.udacitynano.planner.constants.SHDebug;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FilePermission;
+import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,7 +97,7 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
 
         stopEventButton.setOnClickListener((View v) -> {
             viewModel.setEventToDB(null);
-            ListPreferences.setWidgetDataPreferences(getApplication(),this, "");
+            ListPreferences.setWidgetDataPreferences(getApplication(), this, "");
         });
 
         SHDebug.debugTag(CLASS_NAME, "onCreate:End");
@@ -130,8 +139,17 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
                 getFilteredCategories(MyConstants.SOURCE_STATUS, "");
                 break;
             case R.id.menu_list_item_action_data:
-                // TODO: Implement services
-                //Toast.makeText(this, "Create report", Toast.LENGTH_SHORT).show();
+                /**
+                 * TODO: Information for reviewer:
+                 * This is for check service
+                 */
+//                Crashlytics.getInstance().crash();
+
+                /**
+                 * AsyncTask
+                 */
+
+
                 break;
             default:
                 break;
@@ -198,7 +216,7 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
     @Override
     public void onCategoryClick(CategoryEntity category, View view) {
         viewModel.setEventToDB(category);
-        ListPreferences.setWidgetDataPreferences(getApplication(),this, category.getName());
+        ListPreferences.setWidgetDataPreferences(getApplication(), this, category.getName());
     }
 
 
