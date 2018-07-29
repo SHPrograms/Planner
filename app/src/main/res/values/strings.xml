@@ -4,7 +4,7 @@
     <!--menu_list-->
     <string name="menu_list_item_action_search">Search</string>
     <string name="menu_list_item_action_filter">Active categories</string>
-    <string name="menu_list_item_action_data">Export database</string>
+    <string name="menu_list_item_action_data">Delete database</string>
     <string name="stop_event_button_text">Stop Event</string>
     <string name="cd_search_results_list">List of categories</string>
     <string name="cd_stop_event_button">Stop event button</string>
@@ -24,4 +24,7 @@
     <string name="widget_title_empty">No active events</string>
     <!--Ads-->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="AlertDialor_chooser_title">What you can do here:</string>
+    <string name="data_has_been_deleted">Data has been deleted</string>
+    <string name="problems">There was a problem to delete data</string>
 </resources>

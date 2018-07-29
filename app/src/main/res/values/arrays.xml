@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pick_source">
+    <item>Delete data from database using asyncTask</item>
+    <item>Test service Crashlytics</item>
+    </string-array>
+</resources>

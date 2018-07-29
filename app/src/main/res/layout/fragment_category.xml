@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/new_category_name_label"
-        style="@style/TextAppearance.AppCompat.Large"
+        style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/text_padding"
@@ -20,7 +20,7 @@
 
     <EditText
         android:id="@+id/new_category_name_et"
-        style="@style/TextAppearance.AppCompat.Large"
+        style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/text_padding"

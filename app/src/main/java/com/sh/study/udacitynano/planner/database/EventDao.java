@@ -35,4 +35,7 @@ public interface EventDao {
 
     @Query("SELECT SUM(time) FROM event WHERE category_id = :id")
     LiveData<Long> loadEventsTimeForCategory(int id);
+
+    @Query("DELETE FROM event")
+    void deleteAllEvents();
 }

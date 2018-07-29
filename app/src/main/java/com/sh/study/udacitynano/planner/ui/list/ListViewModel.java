@@ -87,4 +87,14 @@ public class ListViewModel extends ViewModel {
             throw new UnsupportedOperationException("Not implemented yet.");
         }
     }
+
+    public Boolean deleteData() {
+        boolean result = false;
+        try {
+            repository.deletedata();
+            result = true;
+        } finally {
+            return result;
+        }
+    }
 }

@@ -113,4 +113,10 @@ public class DatabaseRepository {
         SHDebug.debugTag(CLASS_NAME, "getTimeForCategoryFromDb");
         return plannerDatabase.eventDao().loadEventsTimeForCategory(id);
     }
+
+    public void deletedata() {
+        SHDebug.debugTag(CLASS_NAME, "deleteData");
+        executors.diskIO().execute(() -> plannerDatabase.eventDao().deleteAllEvents());
+        executors.diskIO().execute(() -> plannerDatabase.categoryDao().deleteAllCategories());
+    }
 }

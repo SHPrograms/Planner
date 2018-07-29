@@ -1,10 +1,11 @@
 package com.sh.study.udacitynano.planner.ui.list;
 
+import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import android.os.AsyncTask;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
@@ -23,13 +25,6 @@ import com.sh.study.udacitynano.planner.utils.InjectorUtils;
 import com.sh.study.udacitynano.planner.ui.category.CategoryActivity;
 import com.sh.study.udacitynano.planner.R;
 import com.sh.study.udacitynano.planner.constants.SHDebug;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FilePermission;
-import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -139,23 +134,50 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
                 getFilteredCategories(MyConstants.SOURCE_STATUS, "");
                 break;
             case R.id.menu_list_item_action_data:
-                /**
-                 * TODO: Information for reviewer:
-                 * This is for check service
-                 */
-//                Crashlytics.getInstance().crash();
-
-                /**
-                 * AsyncTask
-                 */
-
-
+                deleteAction();
                 break;
             default:
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteAction() {
+        SHDebug.debugTag(CLASS_NAME, "deleteAction:Start");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.AlertDialor_chooser_title)
+                .setItems(R.array.pick_source, (dialog, which) -> {
+                    switch (which) {
+                        case 0:
+                            new AsyncTask<Void, Void, Boolean>() {
+                                @Override
+                                protected Boolean doInBackground(Void... voids) {
+                                    SHDebug.debugTag(CLASS_NAME, "doInBackground");
+                                    return viewModel.deleteData();
+                                }
+
+                                @Override
+                                protected void onPostExecute(Boolean aBoolean) {
+                                    super.onPostExecute(aBoolean);
+                                    SHDebug.debugTag(CLASS_NAME, "onPostExecute");
+                                    if (aBoolean) {
+                                        Snackbar.make(getCurrentFocus(), getString(R.string.data_has_been_deleted), Snackbar.LENGTH_LONG)
+                                                .setAction("Action", null).show();
+                                    } else {
+                                        Snackbar.make(getCurrentFocus(), getString(R.string.problems), Snackbar.LENGTH_LONG)
+                                                .setAction("Action", null).show();
+                                    }
+                                }
+                            }.execute();
+                            break;
+                        case 1:
+                            Crashlytics.getInstance().crash();
+                            break;
+                    }
+                });
+        builder.create();
+        builder.show();
     }
 
     @Override

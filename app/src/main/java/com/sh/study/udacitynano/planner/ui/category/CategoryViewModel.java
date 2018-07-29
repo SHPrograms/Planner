@@ -64,6 +64,9 @@ public class CategoryViewModel extends ViewModel {
             int parent = parentCategory.getValue().getId();
             final CategoryEntity categoryEntity = new CategoryEntity(name, parent, true);
             repository.setInsertCategoryInDB(categoryEntity);
+        } else {
+            final CategoryEntity categoryEntity = new CategoryEntity(name, 0, true);
+            repository.setInsertCategoryInDB(categoryEntity);
         }
     }
 

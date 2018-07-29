@@ -77,4 +77,7 @@ public interface CategoryDao {
      */
     @Query("SELECT * FROM category WHERE id = :id")
     LiveData<CategoryEntity> loadCategoryById(int id);
+
+    @Query("DELETE FROM category")
+    void deleteAllCategories();
 }
