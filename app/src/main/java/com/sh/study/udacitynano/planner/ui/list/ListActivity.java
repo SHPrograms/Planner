@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -49,10 +48,6 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
 
 
     /*
-        TODO: List:
-        - save status of active event into sharedPref
-        - how to block buttons when they shouldn't be active in menu?
-        TODO: New .gitignoge list based on https://github.com/lineargs/WatchNextApp to prepare for services
         TODO: Save data using services:
         - send all events and categories
         - Use asyncTask for fetch data as report outside using services
