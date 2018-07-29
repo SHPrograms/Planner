@@ -1,6 +1,7 @@
 package com.sh.study.udacitynano.planner.ui.category;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 
 import com.sh.study.udacitynano.planner.constants.SHDebug;
@@ -20,12 +21,24 @@ public class CategoryViewModel extends ViewModel {
 
     private LiveData<CategoryEntity> parentCategory;
     private LiveData<CategoryEntity> mainCategory;
+    private LiveData<Long> time;
 
     CategoryViewModel(DatabaseRepository repository, int parentCategoryItem, int mainCategoryItem) {
         SHDebug.debugTag(CLASS_NAME, "constructor");
         this.repository = repository;
         this.parentCategory = repository.getCategoryByIdFromDB(parentCategoryItem);
         this.mainCategory = repository.getCategoryByIdFromDB(mainCategoryItem);
+
+        time = Transformations.switchMap(mainCategory, t -> {
+            if (mainCategory.getValue() == null) {
+                return repository.getTimeForCategoryFromDb(0);
+            } else {
+                return repository.getTimeForCategoryFromDb(mainCategory.getValue().getId());
+            }
+        });
+
+
+
     }
 
     public LiveData<CategoryEntity> getParentCategory() {
@@ -65,6 +78,11 @@ public class CategoryViewModel extends ViewModel {
             categoryEntity.setStatus(false);
             repository.setUpdateCategoryInDB(categoryEntity);
         }
+    }
+
+    public LiveData<Long> getTime() {
+        SHDebug.debugTag(CLASS_NAME, "getTime");
+            return time;
     }
 }
 

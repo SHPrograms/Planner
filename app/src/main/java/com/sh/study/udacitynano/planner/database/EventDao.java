@@ -35,6 +35,9 @@ public interface EventDao {
     @Query("SELECT * FROM event WHERE time = 0 LIMIT 1")
     LiveData<EventEntity> loadRunningEvent();
 
+    @Query("SELECT SUM(time) FROM event WHERE category_id = :id")
+    LiveData<Long> loadEventsTimeForCategory(int id);
+
 /*
     @Query("SELECT * FROM event ORDER BY id")
     LiveData<List<EventEntity>> loadAllEvents();

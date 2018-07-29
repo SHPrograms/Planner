@@ -25,6 +25,7 @@ public class ListViewModel extends ViewModel {
     private final DatabaseRepository repository;
 
     private LiveData<EventEntity> activeEvent;
+    private boolean buttonIsVisible;
 
     private String searchText;
     private boolean status;
@@ -34,11 +35,11 @@ public class ListViewModel extends ViewModel {
         this.repository = repository;
         this.searchText = searchText;
         this.status = status;
-        activeEvent = repository.getActiveEvent();
+//        activeEvent = repository.getActiveEvent();
     }
 
     public LiveData<EventEntity> getActiveEvent() {
-        return activeEvent;
+        return activeEvent = repository.getActiveEvent();
     }
 
     public String getSearchText() {
@@ -48,7 +49,6 @@ public class ListViewModel extends ViewModel {
     public void setStatus(boolean status) {
         SHDebug.debugTag(CLASS_NAME, "setStatus");
         this.status = status;
-        // TODO: I should refresh here list using Transformations.switchMap?
     }
 
     public boolean getStatus() {
@@ -89,5 +89,13 @@ public class ListViewModel extends ViewModel {
         } else {
             throw new UnsupportedOperationException("Not implemented yet.");
         }
+    }
+
+    public boolean isButtonIsVisible() {
+        return buttonIsVisible;
+    }
+
+    public void setButtonIsVisible(boolean buttonIsVisible) {
+        this.buttonIsVisible = buttonIsVisible;
     }
 }

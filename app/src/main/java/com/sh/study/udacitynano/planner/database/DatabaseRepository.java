@@ -108,4 +108,9 @@ public class DatabaseRepository {
         SHDebug.debugTag(CLASS_NAME, "setActiveEvent");
         executors.diskIO().execute(() -> plannerDatabase.eventDao().updateEvent(activeEvent));
     }
+
+    public LiveData<Long> getTimeForCategoryFromDb(int id) {
+        SHDebug.debugTag(CLASS_NAME, "getTimeForCategoryFromDb");
+        return plannerDatabase.eventDao().loadEventsTimeForCategory(id);
+    }
 }

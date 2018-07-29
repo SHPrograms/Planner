@@ -40,7 +40,6 @@ public abstract class PlannerDatabase extends RoomDatabase {
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         PlannerDatabase.class, PlannerDatabase.DATABASE_NAME)
                         .fallbackToDestructiveMigration()
-                        .addCallback(callback) // TODO: temporary!
                         .build();
             }
         }
@@ -50,39 +49,4 @@ public abstract class PlannerDatabase extends RoomDatabase {
     public abstract EventDao eventDao();
 
     public abstract CategoryDao categoryDao();
-
-    // TODO: Temporary!
-
-    private static RoomDatabase.Callback callback = new RoomDatabase.Callback() {
-        public void onCreate(SupportSQLiteDatabase db) {
-
-        }
-
-        public void onOpen(SupportSQLiteDatabase db) {
-            db.execSQL("Delete From category");
-            db.execSQL("Delete From event");
-
-            ContentValues contentValues = new ContentValues();
-
-            contentValues.put("name", "Popular Movies");
-            contentValues.put("parent_id", 0);
-            contentValues.put("status", 0);
-            db.insert("category", OnConflictStrategy.IGNORE, contentValues);
-
-            contentValues.put("name", "Build It Bigger");
-            contentValues.put("parent_id", 0);
-            contentValues.put("status", 0);
-            db.insert("category", OnConflictStrategy.IGNORE, contentValues);
-
-            contentValues.put("name", "Capstone, Stage 1 - Design");
-            contentValues.put("parent_id", 0);
-            contentValues.put("status", 0);
-            db.insert("category", OnConflictStrategy.IGNORE, contentValues);
-
-            contentValues.put("name", "Capstone, Stage 2 - Build");
-            contentValues.put("parent_id", 0);
-            contentValues.put("status", 1);
-            db.insert("category", OnConflictStrategy.IGNORE, contentValues);
-        }
-    };
 }

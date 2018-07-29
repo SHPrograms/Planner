@@ -42,6 +42,7 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
     Button stopEventButton;
 
     private SearchView searchView;
+
     private ListViewModel viewModel;
     private ListFragment fragment;
 
@@ -49,12 +50,21 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
 
     private static final String CLASS_NAME = "ListActivity";
 
+
     /*
-        TODO list:
-        TODO: Category details: swipe right:
-        - add new caption with information how much time is in events
-        TODO: Widget
-        TODO: Save data using services
+        TODO: List:
+        - save status of active event into sharedPref
+        - check lifecycle because Button is not visible when app is hidden - onRestart or onSaveInstance
+        - how to block buttons when they shouldn't be active in menu?
+        TODO: New .gitignoge list based on https://github.com/lineargs/WatchNextApp to prepare for services
+        TODO: Save data using services:
+        - send all events and categories
+        - Use asyncTask for fetch data as report outside using services
+        - delete not active categories and all events
+        TODO: check if I have content descriptions and / or navigation using a D-pad.
+        TODO: check if all strings are in a strings.xml file and enables RTL layout switching on all layouts.
+        TODO: Sign apk - https://www.youtube.com/watch?v=xhQu7qyMqcI&feature=youtu.be
+        TODO: Check if App builds and deploys using the installRelease Gradle task.
     */
 
     @Override
@@ -78,6 +88,10 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
 
         viewModel = ViewModelProviders.of(this, factory).get(ListViewModel.class);
 
+        // TODO: Move from factory these data and run them here plus add check about active event because
+        ListPreferences.getSourceStatusPreferences(this);
+        ListPreferences.getSearchTextPreferences(this);
+        // TODO: this is not working after orientation change. Why?
         getActiveEvent();
 
         fab.setOnClickListener(view -> {
@@ -88,7 +102,11 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
             startActivity(addCategory);
         });
 
-        stopEventButton.setOnClickListener(v -> viewModel.setEventToDB(null));
+        stopEventButton.setOnClickListener((View v) -> {
+            viewModel.setEventToDB(null);
+            ListPreferences.setWidgetDataPreferences(getApplication(),this, "");
+//            viewModel.setButtonIsVisible(false);
+        });
 
         SHDebug.debugTag(CLASS_NAME, "onCreate:End");
     }
@@ -97,19 +115,22 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
     public boolean onCreateOptionsMenu(Menu menu) {
         SHDebug.debugTag(CLASS_NAME, "onCreateOptionsMenu:Start");
         getMenuInflater().inflate(R.menu.menu_list, menu);
+
         searchView = (SearchView) menu.findItem(R.id.menu_list_item_action_search).getActionView();
         searchView.setOnQueryTextListener(onQueryTextListener);
         searchView.setQuery(viewModel.getSearchText(), true);
+
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         SHDebug.debugTag(CLASS_NAME, "onOptionsItemSelected:Start");
+
         switch (item.getItemId()) {
             case R.id.menu_list_item_action_search:
                 // SearchView Filter for Categories
-                //Toast.makeText(this, "search selected", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "sSnaearch selected", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_list_item_action_filter:
                 if (viewModel.getStatus()) {
@@ -126,11 +147,12 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
                 break;
             case R.id.menu_list_item_action_data:
                 // TODO: Implement services
-                Toast.makeText(this, "Create report", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Create report", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -160,13 +182,19 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
             if (activeEvent != null) {
                 SHDebug.debugTag(CLASS_NAME, "getActiveEvent:observe, event: " + activeEvent.getId());
                 fragment.recyclerView.setVisibility(View.INVISIBLE);
+                fab.setVisibility(View.INVISIBLE);
                 stopEventButton.setVisibility(View.VISIBLE);
+                viewModel.setButtonIsVisible(false);
+
             } else {
                 fragment.recyclerView.setVisibility(View.VISIBLE);
+                fab.setVisibility(View.VISIBLE);
                 stopEventButton.setVisibility(View.INVISIBLE);
+                viewModel.setButtonIsVisible(true);
             }
         });
     }
+
     /**
      * SearchView Listener. Fetching data into RecyclerView in Fragment {R.id.fragment}
      */
@@ -188,12 +216,9 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
 
     @Override
     public void onCategoryClick(CategoryEntity category, View view) {
-        Snackbar.make(getCurrentFocus(), "Event is started", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
         viewModel.setEventToDB(category);
-        /*
-            TODO: send broadcast for widget when event is started and finished
-        */
+//        viewModel.setButtonIsVisible(true);
+        ListPreferences.setWidgetDataPreferences(getApplication(),this, category.getName());
     }
 
     @Override

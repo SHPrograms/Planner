@@ -39,31 +39,13 @@
         android:layout_margin="@dimen/text_margin"
         android:text="@string/new_category_search_label"/>
 
-    <!--
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/new_category_search_label">
+    <TextView
+        android:id="@+id/new_category_time_label"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/text_padding"
+        android:layout_margin="@dimen/text_margin"
+        android:text="@string/new_category_time_label"/>
 
-            <android.support.v7.widget.SearchView
-                android:id="@+id/new_category_search"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true" />
-
-            <ListView
-                android:id="@+id/new_category_search_list_view"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/new_category_search" />
-        </RelativeLayout>
-        -->
 </LinearLayout>

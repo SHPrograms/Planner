@@ -1,7 +1,9 @@
 package com.sh.study.udacitynano.planner.ui.category;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -38,8 +40,8 @@ public class CategoryActivity extends AppCompatActivity {
     public TextView newCategoryNameLabel;
     @BindView(R.id.new_category_name_et)
     public EditText newCategoryName;
-
-    private CategoryFragment fragment;
+    @BindView(R.id.new_category_time_label)
+    public TextView newCategoryTimeLabel;
 
     private static final String CLASS_NAME = "CategoryActivity";
     private CategoryViewModel viewModel;
@@ -54,8 +56,6 @@ public class CategoryActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        fragment = (CategoryFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_new_category);
-
         CategoryViewModelFactory factory = InjectorUtils.provideCategoryActivityViewModelFactory(
                 this.getApplicationContext(),
                 getIntent().getIntExtra(MyConstants.INTENT_PARENT_CATEGORY_ID, 0),
@@ -68,6 +68,21 @@ public class CategoryActivity extends AppCompatActivity {
             } else {
                 newCategorySearchLabel.setText(
                         String.format(getString(R.string.new_category_search_label) + parentCategory.getName()));
+            }
+        });
+
+        viewModel.getTime().observe(this, aLong -> {
+            if ((aLong == null) || (aLong == 0)) {
+                newCategoryTimeLabel.setVisibility(View.INVISIBLE);
+            } else {
+                newCategoryTimeLabel.setVisibility(View.VISIBLE);
+
+                newCategoryTimeLabel.setText(String.format(getString(R.string.new_category_time_label) +
+                        " " +
+                        String.format("%02d:%02d:%02d", aLong / (3600 * 1000),
+                                aLong / (60 * 1000) % 60,
+                                aLong / 1000 % 60)
+                ));
             }
         });
 
@@ -93,7 +108,7 @@ public class CategoryActivity extends AppCompatActivity {
                 menu.findItem(R.id.menu_category_item_action_events).setVisible(false);
             } else {
                 setTitle("Details");
-                if (! mainCategory.getStatus()) {
+                if (!mainCategory.getStatus()) {
                     newCategoryNameLabel.setText(R.string.new_category_name_label_deactivated);
                     menu.findItem(R.id.menu_category_item_action_delete).setVisible(false);
                     newCategoryName.setEnabled(false);
@@ -117,7 +132,7 @@ public class CategoryActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.menu_category_item_action_delete) {
             String name = getNewCategoryName();
-            if (! name.isEmpty()) {
+            if (!name.isEmpty()) {
                 viewModel.setAsInactiveStatusCategoryToDB(name);
                 finish();
             }
