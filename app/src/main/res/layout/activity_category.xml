@@ -31,6 +31,7 @@
         android:layout_gravity="bottom|end"
         android:elevation="@dimen/fab_elevation"
         android:layout_margin="@dimen/fab_margin"
+        android:contentDescription="@string/cd_fab_category"
         app:srcCompat="@android:drawable/ic_menu_save" />
 
 </android.support.design.widget.CoordinatorLayout>

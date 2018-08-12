@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.Toast;
 import android.os.AsyncTask;
 
-import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
 import com.sh.study.udacitynano.planner.constants.MyConstants;
 import com.sh.study.udacitynano.planner.database.CategoryEntity;
@@ -46,21 +45,8 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
 
     private static final String CLASS_NAME = "ListActivity";
 
-
     private ListViewModel viewModel;
     private ListFragment fragment;
-
-
-    /*
-        TODO: Save data using services:
-        - send all events and categories
-        - Use asyncTask for fetch data as report outside using services
-        - delete not active categories and all events
-        TODO: check if I have content descriptions and / or navigation using a D-pad.
-        TODO: check if all strings are in a strings.xml file and enables RTL layout switching on all layouts.
-        TODO: Sign apk - https://www.youtube.com/watch?v=xhQu7qyMqcI&feature=youtu.be
-        TODO: Check if App builds and deploys using the installRelease Gradle task.
-    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +54,7 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
         SHDebug.debugTag(CLASS_NAME, "onCreate:Start");
         setContentView(R.layout.activity_list);
         ButterKnife.bind(this);
+
         // TODO: Only for testing
         Stetho.initializeWithDefaults(this);
 
@@ -119,17 +106,16 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
         switch (item.getItemId()) {
             case R.id.menu_list_item_action_search:
                 // SearchView Filter for Categories
-                //Toast.makeText(this, "sSnaearch selected", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_list_item_action_filter:
                 if (viewModel.getStatus()) {
                     viewModel.setStatus(false);
                     item.setIcon(ContextCompat.getDrawable(this, android.R.drawable.checkbox_off_background));
-                    Toast.makeText(this, "All categories", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toast_All_categories), Toast.LENGTH_SHORT).show();
                 } else {
                     viewModel.setStatus(true);
                     item.setIcon(ContextCompat.getDrawable(this, android.R.drawable.checkbox_on_background));
-                    Toast.makeText(this, "Only active categories", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toast_only_active_categories), Toast.LENGTH_SHORT).show();
                 }
                 getFilteredCategories(MyConstants.SOURCE_STATUS, "");
                 break;
@@ -163,16 +149,16 @@ public class ListActivity extends AppCompatActivity implements ListInterface {
                                     SHDebug.debugTag(CLASS_NAME, "onPostExecute");
                                     if (aBoolean) {
                                         Snackbar.make(getCurrentFocus(), getString(R.string.data_has_been_deleted), Snackbar.LENGTH_LONG)
-                                                .setAction("Action", null).show();
+                                                .show();
                                     } else {
                                         Snackbar.make(getCurrentFocus(), getString(R.string.problems), Snackbar.LENGTH_LONG)
-                                                .setAction("Action", null).show();
+                                                .show();
                                     }
                                 }
                             }.execute();
                             break;
                         case 1:
-                            Crashlytics.getInstance().crash();
+//                            Crashlytics.getInstance().crash();
                             break;
                     }
                 });

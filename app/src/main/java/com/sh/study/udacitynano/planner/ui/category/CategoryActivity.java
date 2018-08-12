@@ -1,9 +1,7 @@
 package com.sh.study.udacitynano.planner.ui.category;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,8 +12,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.sh.study.udacitynano.planner.R;
 import com.sh.study.udacitynano.planner.constants.MyConstants;
 import com.sh.study.udacitynano.planner.constants.SHDebug;
@@ -44,9 +40,6 @@ public class CategoryActivity extends AppCompatActivity {
     public EditText newCategoryName;
     @BindView(R.id.new_category_time_label)
     public TextView newCategoryTimeLabel;
-    @BindView(R.id.adView)
-    public AdView adView;
-
 
     private static final String CLASS_NAME = "CategoryActivity";
     private CategoryViewModel viewModel;
@@ -98,10 +91,6 @@ public class CategoryActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -115,7 +104,7 @@ public class CategoryActivity extends AppCompatActivity {
                 menu.findItem(R.id.menu_category_item_action_delete).setVisible(false);
                 menu.findItem(R.id.menu_category_item_action_events).setVisible(false);
             } else {
-                setTitle("Details");
+                setTitle(getString(R.string.app_name_category_details));
                 if (!mainCategory.getStatus()) {
                     newCategoryNameLabel.setText(R.string.new_category_name_label_deactivated);
                     menu.findItem(R.id.menu_category_item_action_delete).setVisible(false);

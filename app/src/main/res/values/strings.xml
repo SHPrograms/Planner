@@ -22,9 +22,14 @@
     <!--Widget-->
     <string name="widget_title">There is active event for: %1$s category</string>
     <string name="widget_title_empty">No active events</string>
-    <!--Ads-->
-    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+
+
     <string name="AlertDialor_chooser_title">What you can do here:</string>
     <string name="data_has_been_deleted">Data has been deleted</string>
     <string name="problems">There was a problem to delete data</string>
+    <string name="toast_All_categories">All categories</string>
+    <string name="toast_only_active_categories">Only active categories</string>
+    <string name="app_name_category_details">Details</string>
+    <string name="cd_fab_list">Create new category</string>
+    <string name="cd_fab_category">Save category</string>
 </resources>
